@@ -2,7 +2,7 @@ set(CMAKE_SYSTEM_NAME "Generic")
 set(CMAKE_SYSTEM_PROCESSOR "x86_64")
 
 set(TRIPLE "x86_64-none-elf")
-set(COMPILER_FLAGS "-ffreestanding -nostdlib -static -m64")
+set(COMPILER_FLAGS "-ffreestanding -nostdlib -static -m64 -mno-red-zone")
 
 set(CMAKE_C_FLAGS_INIT "${COMPILER_FLAGS}")
 set(CMAKE_C_COMPILER "clang")
