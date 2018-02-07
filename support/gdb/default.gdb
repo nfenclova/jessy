@@ -1,3 +1,3 @@
 symbol-file build/kernel.sym
-target remote | qemu-system-x86_64 -S -gdb stdio -cdrom build/kernel.iso
+target remote localhost:1234
 break _start
