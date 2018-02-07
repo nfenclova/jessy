@@ -7,6 +7,6 @@ PDIR="${SDIR}/../../"
 
 cd "${PDIR}"
 
-gdb -x support/gdb/default.gdb
+gdb -x support/gdb/default.gdb $1
 
 cd "${ODIR}"
