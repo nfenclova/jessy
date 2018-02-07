@@ -43,6 +43,7 @@ _start:
   mov dword [0xb8000], 0x2f4b2f4f
 
   call check_loaded_by_multiboot
+  call check_cpuid_is_supported
 
   call kernel_main
   hlt
@@ -53,4 +54,26 @@ check_loaded_by_multiboot:
   ret
 .error:
   mov al, "m"
+  jmp _panic
+
+check_cpuid_is_supported:
+  pushfd
+  pop eax
+  mov ecx, eax
+
+  xor eax, 1 << 21
+  push eax
+  popfd
+
+  pushfd
+  pop eax
+
+  push ecx
+  popfd
+
+  cmp eax,ecx
+  je .error
+  ret
+.error
+  mov al, "c"
   jmp _panic
