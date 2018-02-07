@@ -39,5 +39,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   ARGS -o ${PROJECT_NAME}.iso ${CMAKE_BINARY_DIR}/iso
   COMMENT "Packing bootable ISO..."
   )
-
-target_link_libraries(${PROJECT_NAME} gcc)
