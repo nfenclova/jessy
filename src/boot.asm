@@ -1,6 +1,8 @@
 ; vim: ft=nasm et ts=2 sw=2
 
 extern kernel_main
+global _start
+
 OK equ 0x2f4b2f4f
 
 section .multiboot_header
@@ -19,11 +21,8 @@ header_start:
     dd 8
 header_end:
 
-
 section .text
 bits 32
-
-global _start
 _start:
   mov dword [0xb8000], OK
   call kernel_main
