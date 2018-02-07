@@ -6,9 +6,10 @@ ODIR="$(pwd)"
 SDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
 PDIR="${SDIR}/../../"
 
-mkdir -p "${PDIR}"
+mkdir -p "${PDIR}/build"
 
-cd "${SDIR}/build"
+cd "${PDIR}/build"
+
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchains/ClangCrossToolchain.cmake
 cmake --build . -- -j$(nproc)
 
