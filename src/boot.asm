@@ -44,6 +44,7 @@ _start:
 
   call check_loaded_by_multiboot
   call check_cpuid_is_supported
+  call check_long_mode_is_supported
 
   call kernel_main
   hlt
@@ -74,6 +75,21 @@ check_cpuid_is_supported:
   cmp eax,ecx
   je .error
   ret
-.error
+.error:
   mov al, "c"
+  jmp _panic
+
+check_long_mode_is_supported:
+  mov eax, 0x80000000
+  cpuid
+  cmp eax, 0x80000001
+  jb .error
+
+  mov eax, 0x80000001
+  cpuid
+  test edx, 1 << 29
+  jz .error
+  ret
+.error:
+  mov al, "l"
   jmp _panic
