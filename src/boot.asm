@@ -23,7 +23,14 @@ header_start:
 header_end:
 
 section .bss
+align 4096
 
+plm4:
+  resb 4096
+pdp:
+  resb 4096
+pd:
+  resb 4096
 stack_bottom:
   resb 64
 stack_top:
@@ -40,12 +47,13 @@ _panic:
 
 _start:
   mov esp, stack_top
-  mov dword [0xb8000], 0x2f4b2f4f
 
   call check_loaded_by_multiboot
   call check_cpuid_is_supported
   call check_long_mode_is_supported
+  call initialize_page_table_structure
 
+  mov dword [0xb8000], 0x2f4b2f4f
   call kernel_main
   hlt
 
@@ -93,3 +101,25 @@ check_long_mode_is_supported:
 .error:
   mov al, "l"
   jmp _panic
+
+initialize_page_table_structure:
+  mov eax, pdp
+  or eax, 0x3
+  mov [plm4], eax
+
+  mov eax, pd
+  or eax, 0x3
+  mov [pdp], eax
+
+  xor ecx, ecx
+.map_pt_pages:
+  mov eax, 0x20000
+  mul ecx
+  or  eax, 0x83
+  mov [pd + ecx * 8], eax
+
+  inc ecx
+  cmp ecx, 512
+  jne .map_pt_pages
+
+  ret
