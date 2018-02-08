@@ -60,8 +60,7 @@ namespace os
       }
     };
 
-  template<typename = void>
-  inline constexpr decltype(auto) vga_text_buffer(os::core::ptrdiff_t offset)
+  inline decltype(auto) vga_text_buffer(os::core::ptrdiff_t offset)
     {
     return (*reinterpret_cast<uint16_t volatile *>(0xb8000 + offset * 2));
     }
