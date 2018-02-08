@@ -52,6 +52,7 @@ _start:
   call check_cpuid_is_supported
   call check_long_mode_is_supported
   call initialize_page_table_structure
+  call enable_paging
 
   mov dword [0xb8000], 0x2f4b2f4f
   call kernel_main
@@ -121,5 +122,24 @@ initialize_page_table_structure:
   inc ecx
   cmp ecx, 512
   jne .map_pt_pages
+
+  ret
+
+enable_paging:
+  mov eax, plm4
+  mov cr3, eax
+
+  mov eax, cr4
+  or eax, 1 << 5
+  mov cr4, eax
+
+  mov ecx, 0xC0000080
+  rdmsr
+  or eax, 1 << 8
+  wrmsr
+
+  mov eax, cr0
+  or eax, 1 << 31
+  mov cr0, eax
 
   ret
