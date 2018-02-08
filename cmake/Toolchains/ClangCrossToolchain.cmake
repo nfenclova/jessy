@@ -43,4 +43,4 @@ set(CMAKE_CXX_COMPILER_TARGET "${TRIPLE}")
 
 set(CMAKE_C_SIZEOF_DATA_PTR "8" CACHE STRING "" FORCE)
 
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,-n,--build-id=none" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-n,--gc-sections,--build-id=none" CACHE STRING "" FORCE)
