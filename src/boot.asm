@@ -35,6 +35,14 @@ stack_bottom:
   resb 64
 stack_top:
 
+section .rodata
+gdt:
+  dq 0
+  dq (1<<43) | (1<<44) | (1<<47) | (1<<53)
+.ptr:
+  dw $ - gdt - 1
+  dq gdt
+
 section .text
 bits 32
 
@@ -53,6 +61,8 @@ _start:
   call check_long_mode_is_supported
   call initialize_page_table_structure
   call enable_paging
+
+  lgdt [gdt.ptr]
 
   mov dword [0xb8000], 0x2f4b2f4f
   call kernel_main
