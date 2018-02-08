@@ -223,10 +223,6 @@ _start_long:
   mov fs, ax
   mov gs, ax
 
-.print_okay:
-  mov rax, 0x2f592f412f4b2f4f
-  mov qword [0xb8000], rax
-
 .enter_kernel:
   call kernel_main
   hlt
