@@ -11,6 +11,12 @@ SECTIONS
 
   .text :
   {
+    /*
+    KEEP(*(.init*))
+    KEEP(*(.fini*))
+    KEEP(*(.ctors*))
+    KEEP(*(.dtors*))
+    */
     *(.text*)
   }
 
@@ -27,7 +33,7 @@ SECTIONS
   .bss :
   {
     *(COMMON)
-    *(.bss)
+    *(.bss*)
   }
 
   /DISCARD/ :

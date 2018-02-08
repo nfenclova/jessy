@@ -1,6 +1,8 @@
 #include "core/int_types.hpp"
 #include "vga/text.hpp"
 
+extern "C" void _init();
+
 extern "C" void kernel_main()
   {
   os::vga::text::print({
@@ -10,4 +12,6 @@ extern "C" void kernel_main()
     os::vga::text::background_modifier::none},
     "Booted to C++-land"
   );
+
+  _init();
   }

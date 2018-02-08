@@ -1,9 +1,29 @@
 add_subdirectory("vga")
 
-add_executable(${PROJECT_NAME}
+add_library(kern_objs OBJECT
   "boot.asm"
   "main.cpp"
-  "$<TARGET_OBJECTS:vga>"
+  )
+
+add_library(crt_init OBJECT
+  "crti.asm"
+  )
+
+add_library(crt_end OBJECT
+  "crtn.asm"
+  )
+
+add_executable(${PROJECT_NAME}
+  $<TARGET_OBJECTS:crt_init>
+  ${CROSS_GCC_CRTBEGIN}
+  $<TARGET_OBJECTS:kern_objs>
+  $<TARGET_OBJECTS:vga>
+  ${CROSS_GCC_CRTEND}
+  $<TARGET_OBJECTS:crt_end>
+  )
+
+target_link_libraries(${PROJECT_NAME}
+  gcc
   )
 
 set_target_properties(${PROJECT_NAME}
