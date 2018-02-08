@@ -44,14 +44,36 @@ gdt:
   dw $ - gdt - 1
   dq gdt
 
+msg_panic: db "PANIC: ",0
+msg_multiboot: db "NOT LOADED BY MULTIBOOT2 LOADER",0
+msg_cpuid: db "CPUID INSTRUCTION NOT SUPPORTED",0
+msg_longmode: db "LONG-MODE NOT SUPPORTED",0
+
 section .text
 bits 32
 
 _panic:
-  mov dword [0xb8000], 0x4f524f45
-  mov dword [0xb8004], 0x4f3a4f52
-  mov dword [0xb8008], 0x4f204f20
-  mov byte  [0xb800a], al
+  xor ecx, ecx
+  mov byte bl, [msg_panic]
+.loop:
+  mov byte [0xb8000 + ecx * 2], bl
+  mov byte [0xb8000 + ecx * 2 + 1], 0x4f
+  inc ecx
+  mov byte bl, [msg_panic + ecx]
+  cmp bl, 0
+  jne .loop
+
+  xor edx, edx
+  mov byte bl, [eax]
+.print:
+  mov byte [0xb8000 + ecx * 2], bl
+  mov byte [0xb8000 + ecx * 2 + 1], 0x4f
+  inc ecx
+  inc edx
+  mov byte bl, [eax + edx]
+  cmp bl, 0
+  jne .print
+
   hlt
 
 _start:
@@ -75,7 +97,7 @@ check_loaded_by_multiboot:
   jne .error
   ret
 .error:
-  mov al, "m"
+  mov eax, msg_multiboot
   jmp _panic
 
 check_cpuid_is_supported:
@@ -97,7 +119,7 @@ check_cpuid_is_supported:
   je .error
   ret
 .error:
-  mov al, "c"
+  mov eax, msg_cpuid
   jmp _panic
 
 check_long_mode_is_supported:
@@ -112,7 +134,7 @@ check_long_mode_is_supported:
   jz .error
   ret
 .error:
-  mov al, "l"
+  mov eax, msg_longmode
   jmp _panic
 
 initialize_page_table_structure:
