@@ -17,4 +17,5 @@ include("FindGrubMkrescue")
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/iso/boot/grub")
 
+include_directories("include")
 add_subdirectory("src")

@@ -11,7 +11,7 @@ SECTIONS
 
   .text :
   {
-    *(.text)
+    *(.text*)
   }
 
   .rodata :
