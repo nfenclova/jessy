@@ -44,10 +44,14 @@ gdt:
   dw $ - gdt - 1
   dq gdt
 
-msg_panic: db "PANIC: ",0
-msg_multiboot: db "NOT LOADED BY MULTIBOOT2 LOADER",0
-msg_cpuid: db "CPUID INSTRUCTION NOT SUPPORTED",0
-msg_longmode: db "LONG-MODE NOT SUPPORTED",0
+msg_panic:
+  db "PANIC: ",0
+msg_multiboot:
+  db "NOT LOADED BY MULTIBOOT2 LOADER",0
+msg_cpuid:
+  db "CPUID INSTRUCTION NOT SUPPORTED",0
+msg_longmode:
+  db "LONG-MODE NOT SUPPORTED",0
 
 section .text
 bits 32
