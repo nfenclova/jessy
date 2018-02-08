@@ -38,6 +38,7 @@ stack_top:
 section .rodata
 gdt:
   dq 0
+.code: equ $ - gdt
   dq (1<<43) | (1<<44) | (1<<47) | (1<<53)
 .ptr:
   dw $ - gdt - 1
@@ -64,8 +65,9 @@ _start:
 
   lgdt [gdt.ptr]
 
+  jmp gdt.code:_start_long
+
   mov dword [0xb8000], 0x2f4b2f4f
-  call kernel_main
   hlt
 
 check_loaded_by_multiboot:
@@ -153,3 +155,23 @@ enable_paging:
   mov cr0, eax
 
   ret
+
+section .text
+bits 64
+
+_start_long:
+.reload_segment_registers:
+  xor ax, ax
+  mov ss, ax
+  mov ds, ax
+  mov es, ax
+  mov fs, ax
+  mov gs, ax
+
+.print_okay:
+  mov rax, 0x2f592f412f4b2f4f
+  mov qword [0xb8000], rax
+
+.enter_kernel:
+  call kernel_main
+  hlt
