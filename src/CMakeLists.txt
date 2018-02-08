@@ -1,6 +1,9 @@
+add_subdirectory("vga")
+
 add_executable(${PROJECT_NAME}
   "boot.asm"
   "main.cpp"
+  "$<TARGET_OBJECTS:vga>"
   )
 
 set_target_properties(${PROJECT_NAME}

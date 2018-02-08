@@ -16,7 +16,7 @@ SECTIONS
 
   .rodata :
   {
-    *(.rodata)
+    *(.rodata*)
   }
 
   .data :
