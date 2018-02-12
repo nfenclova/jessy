@@ -1,21 +1,27 @@
+# vim: ft=cmake ts=2 sw=2 et
+
+# Basic Project Configuration
 cmake_minimum_required(VERSION 3.10.0)
-project(kernel
+project(jessy
   LANGUAGES CXX ASM_NASM
+  VERSION 0.1.0
   )
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+# Add the project local cmake module directory to the search path
+list(APPEND
+  CMAKE_MODULE_PATH
+  "${CMAKE_SOURCE_DIR}/cmake/Modules"
+  "${CMAKE_SOURCE_DIR}/cmake/Configuration"
+  )
 
-set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -gdwarf")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Werror -pedantic-errors -g3")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${CMAKE_CURRENT_SOURCE_DIR}/src/kernel.ld")
+# Apply Project Specific Tool Configurations
+include("CXXConfiguration")
+include("LinkerConfiguration")
+include("NasmConfiguration")
 
-set(CMAKE_CXX_STANDARD "17")
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+# Find Project Required Tools
 include("FindGrubMkrescue")
-
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/iso/boot/grub")
 
 include_directories("include")
 add_subdirectory("src")
+add_subdirectory("support")

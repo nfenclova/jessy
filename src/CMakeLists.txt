@@ -1,3 +1,5 @@
+# vim: ft=cmake ts=2 sw=2 et
+
 add_subdirectory("vga")
 
 add_library(kern_objs OBJECT
@@ -31,31 +33,12 @@ set_target_properties(${PROJECT_NAME}
   )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND "objcopy"
-  ARGS --only-keep-debug "$<TARGET_FILE:${PROJECT_NAME}>" ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.sym
-  COMMENT "Extracting debug info..."
+  COMMAND "${CMAKE_OBJCOPY}"
+  ARGS --only-keep-debug "$<TARGET_FILE:${PROJECT_NAME}>" ${CMAKE_BINARY_DIR}/debug_info.sym
+  BYPRODUCTS ${CMAKE_BINARY_DIR}/debug_info.sym
   )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND "objcopy"
+  COMMAND "${CMAKE_STRIP}"
   ARGS --strip-debug "$<TARGET_FILE:${PROJECT_NAME}>"
-  COMMENT "Stripping debug info from kernel image..."
-  )
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND}
-  ARGS -E copy "$<TARGET_FILE:${PROJECT_NAME}>" "${CMAKE_BINARY_DIR}/iso/boot"
-  COMMENT "Copying kernel image..."
-  )
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND}
-  ARGS -E copy "${PROJECT_SOURCE_DIR}/support/grub/grub.cfg" "${CMAKE_BINARY_DIR}/iso/boot/grub"
-  COMMENT "Copying GRUB configuration ..."
-  )
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${GRUB_MKRESCUE}
-  ARGS -o "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.iso" "${CMAKE_BINARY_DIR}/iso"
-  COMMENT "Packing bootable ISO..."
   )

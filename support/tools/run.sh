@@ -7,6 +7,6 @@ PDIR="${SDIR}/../../"
 
 cd "${PDIR}"
 
-qemu-system-x86_64 -cdrom build/kernel.iso 2>/dev/null
+qemu-system-x86_64 -cdrom build/support/boot.iso 2>/dev/null
 
 cd "${ODIR}"

@@ -10,7 +10,13 @@ mkdir -p "${PDIR}/build"
 
 cd "${PDIR}/build"
 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchains/ClangCrossToolchain.cmake
-cmake --build . -- -j$(nproc)
+cmake .. \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchains/ClangCrossToolchain.cmake
+
+cmake --build \
+  . \
+  -- \
+  -j$(nproc)
 
 cd "${ODIR}"
