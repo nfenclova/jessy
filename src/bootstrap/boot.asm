@@ -3,7 +3,9 @@
 extern kernel_main
 global _start
 
-OK equ 0x2f4b2f4f
+BLANK64 equ 0x0f200f200f200f20
+VGABASE equ 0xb8000
+NOFVGAQ equ 500
 
 section .multiboot_header
 
@@ -55,7 +57,7 @@ msg_longmode:
 
 section .data
 vga_buffer:
-  dd 0xb8000
+  dd VGABASE
  
 section .text
 bits 32
@@ -122,7 +124,6 @@ _start:
 
   jmp gdt.code:_start_long
 
-  mov dword [0xb8000], 0x2f4b2f4f
   hlt
 
 check_loaded_by_multiboot:
@@ -223,6 +224,22 @@ _start_long:
   mov fs, ax
   mov gs, ax
 
+  call _clear_vga_buffer
+
 .enter_kernel:
   call kernel_main
   hlt
+
+_clear_vga_buffer:
+  push rbp
+  mov rbp, rsp
+  push rdi
+
+  mov rdi, VGABASE
+  mov rcx, NOFVGAQ
+  mov rax, BLANK64
+  rep stosq
+
+  pop rdi
+  pop rbp
+  ret
