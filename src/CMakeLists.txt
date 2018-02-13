@@ -1,27 +1,20 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+add_subdirectory("bootstrap")
+add_subdirectory("kernel")
+add_subdirectory("runtime")
 add_subdirectory("vga")
 
-add_library(kern_objs OBJECT
-  "boot.asm"
-  "main.cpp"
-  )
-
-add_library(crt_init OBJECT
-  "crti.asm"
-  )
-
-add_library(crt_end OBJECT
-  "crtn.asm"
-  )
-
 add_executable(${PROJECT_NAME}
-  $<TARGET_OBJECTS:crt_init>
+  $<TARGET_OBJECTS:runtime_init>
   ${CROSS_GCC_CRTBEGIN}
-  $<TARGET_OBJECTS:kern_objs>
+
+  $<TARGET_OBJECTS:bootstrap>
+  $<TARGET_OBJECTS:kernel>
   $<TARGET_OBJECTS:vga>
+
   ${CROSS_GCC_CRTEND}
-  $<TARGET_OBJECTS:crt_end>
+  $<TARGET_OBJECTS:runtime_end>
   )
 
 target_link_libraries(${PROJECT_NAME}
@@ -29,7 +22,7 @@ target_link_libraries(${PROJECT_NAME}
   )
 
 set_target_properties(${PROJECT_NAME}
-  PROPERTIES LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/kernel.ld"
+  PROPERTIES LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/kernel/kernel.ld"
   )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
