@@ -1,7 +1,17 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+find_package("GrubMkrescue")
+find_package("Qemu")
+find_package("GDB")
+
 set(ISOFS_DIRECTORY
   "${CMAKE_CURRENT_BINARY_DIR}/isofs"
+  )
+set(ISO_FILE
+  "${CMAKE_CURRENT_BINARY_DIR}/boot.iso"
+  )
+set(SYMBOL_FILE
+  "${CMAKE_BINARY_DIR}/debug_info.sym"
   )
 
 file(MAKE_DIRECTORY
@@ -20,21 +30,22 @@ add_custom_command(OUTPUT "${ISOFS_DIRECTORY}/boot/${PROJECT_NAME}"
 
 add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/boot.iso"
   COMMAND ${GRUB_MKRESCUE} 2>/dev/null
-  ARGS -o "${CMAKE_CURRENT_BINARY_DIR}/boot.iso" "${ISOFS_DIRECTORY}"
+  ARGS -o "${ISO_FILE}" "${ISOFS_DIRECTORY}"
   DEPENDS "${ISOFS_DIRECTORY}/boot/${PROJECT_NAME}" "${ISOFS_DIRECTORY}/boot/grub/grub.cfg"
   )
 
 add_custom_target(iso
   ALL
-  SOURCES "${CMAKE_CURRENT_BINARY_DIR}/boot.iso"
+  SOURCES "${ISO_FILE}"
   )
 
 add_custom_target(boot
-  COMMAND "${PROJECT_SOURCE_DIR}/support/tools/run.sh"
+  COMMAND ${QEMU_SYSTEM_X86_64} -cdrom ${ISO_FILE} 2>/dev/null
   DEPENDS iso
   )
 
 add_custom_target(boot_debug
-  COMMAND "${PROJECT_SOURCE_DIR}/support/tools/debug.sh"
-  DEPENDS ${CMAKE_BINARY_DIR}/debug_info.sym iso
+  COMMAND ${QEMU_SYSTEM_X86_64} -S -s -cdrom ${ISO_FILE} 2>/dev/null &
+  COMMAND ${GDB} -s "${SYMBOL_FILE}" -ex "target remote localhost:1234" -ex "break _start" -ex "c"
+  DEPENDS ${SYMBOL_FILE} iso
   )

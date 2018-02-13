@@ -19,9 +19,6 @@ include("CXXConfiguration")
 include("LinkerConfiguration")
 include("NasmConfiguration")
 
-# Find Project Required Tools
-include("FindGrubMkrescue")
-
 include_directories("include")
 add_subdirectory("src")
 add_subdirectory("support")
