@@ -7,6 +7,12 @@ a minimal amount of assembler. The goal of ``jessy`` is to provide a safe and
 efficient base for custom/experimental operating systems, leveraging the full
 feature-set of the C++ programming language.
 
+.. figure:: https://raw.githubusercontent.com/nfenclova/jessy/assets/images/screenshots/jessy_qemu_boot.png
+   :alt: An early development screenshot
+   :align: center
+
+   An early development screenshot of ``jessy`` running in *QEMU*
+
 Building
 ========
 
