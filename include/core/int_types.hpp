@@ -1,5 +1,5 @@
-#ifndef KERNEL_CORE_INT_TYPES_HPP
-#define KERNEL_CORE_INT_TYPES_HPP
+#ifndef JESSY_CORE_INT_TYPES_HPP
+#define JESSY_CORE_INT_TYPES_HPP
 
 #include <stdint.h>
 #include <stddef.h>

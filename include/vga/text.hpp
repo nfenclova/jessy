@@ -1,5 +1,5 @@
-#ifndef KERNEL_VGA_TEXT_HPP
-#define KERNEL_VGA_TEXT_HPP
+#ifndef JESSY_VGA_TEXT_HPP
+#define JESSY_VGA_TEXT_HPP
 
 #include "core/int_types.hpp"
 
