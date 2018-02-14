@@ -1,12 +1,19 @@
 ; vim: ft=nasm et ts=2 sw=2
 
+; === Imported Functions ===
 extern kernel_main
-global _start
 
+; === Exported Functions ===
+global _start:function
+
+; === Global Constants ===
 BLANK64 equ 0x0f200f200f200f20
 VGABASE equ 0xb8000
+VGACOLS equ 80
+VGAROWS equ 25
 NOFVGAQ equ 500
 
+; === Multiboot 2 Magic Header
 section .multiboot_header
 
 header_start:
@@ -24,6 +31,7 @@ header_start:
     dd 8
 header_end:
 
+; === 64-bit Page Tables ====
 section .bss
 align 4096
 
@@ -37,6 +45,8 @@ stack_bottom:
   resb 64
 stack_top:
 
+
+; === Global Read-only Data
 section .rodata
 gdt:
   dq 0
@@ -55,10 +65,12 @@ msg_cpuid:
 msg_longmode:
   db "LONG-MODE NOT SUPPORTED",0
 
+; === Global Read-write Data
 section .data
 vga_buffer:
   dd VGABASE
  
+; === 32-bit Bootstrap Code
 section .text
 bits 32
 
@@ -212,6 +224,7 @@ enable_paging:
 
   ret
 
+; === 64-bit Bootstrap Code ===
 section .text
 bits 64
 
