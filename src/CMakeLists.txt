@@ -1,6 +1,7 @@
 # vim: ft=cmake ts=2 sw=2 et
 
 add_subdirectory("bootstrap")
+add_subdirectory("core")
 add_subdirectory("kernel")
 add_subdirectory("runtime")
 add_subdirectory("vga")
@@ -10,6 +11,7 @@ add_executable(${PROJECT_NAME}
   ${CROSS_GCC_CRTBEGIN}
 
   $<TARGET_OBJECTS:bootstrap>
+  $<TARGET_OBJECTS:core>
   $<TARGET_OBJECTS:kernel>
   $<TARGET_OBJECTS:vga>
 

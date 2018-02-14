@@ -13,5 +13,7 @@ extern "C" void kernel_main()
     "Booted to C++-land"
   );
 
+  os::vga::text::clear_screen();
+
   _init();
   }
