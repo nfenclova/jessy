@@ -49,3 +49,41 @@ _set_memory_word:
 
   pop rbp
   ret
+
+; @brief Set the memory pointed to by @p destination to @p count copies of @p value
+;
+; @param destination  The destination memory location  @rdi
+; @param value        The value to copy                @rsi
+; @param count        The amount of copies             @rdx
+;
+; _set_memory_double_word(uint32_t volatile * destination, uint32_t const value, size_t const count)
+global _set_memory_double_word:function
+_set_memory_double_word:
+  push rbp
+  mov rbp, rsp
+  mov rax, rsi
+  mov rcx, rdx
+
+  rep stosd
+
+  pop rbp
+  ret
+
+; @brief Set the memory pointed to by @p destination to @p count copies of @p value
+;
+; @param destination  The destination memory location  @rdi
+; @param value        The value to copy                @rsi
+; @param count        The amount of copies             @rdx
+;
+; _set_memory_quad_word(uint64_t volatile * destination, uint64_t const value, size_t const count)
+global _set_memory_quad_word:function
+_set_memory_quad_word:
+  push rbp
+  mov rbp, rsp
+  mov rax, rsi
+  mov rcx, rdx
+
+  rep stosq
+
+  pop rbp
+  ret
