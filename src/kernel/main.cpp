@@ -1,3 +1,4 @@
+#include "core/error.hpp"
 #include "core/int_types.hpp"
 #include "vga/text.hpp"
 
@@ -15,4 +16,6 @@ extern "C" void kernel_main()
   os::vga::text::print_line(cDefaultOutputColor, "Booted to C++-land");
 
   _init();
+
+  os::core::panic({__func__, __FILE__}, "Control-flow returned from kernel!");
   }
