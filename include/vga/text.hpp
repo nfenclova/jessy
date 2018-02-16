@@ -60,9 +60,9 @@ namespace os::vga::text
     background_modifier background_modifier;
     };
 
-  uint16_t volatile & buffer();
-
   void print(color color, char const * const text);
+
+  void print_line(color color, char const * const text);
 
   void clear_screen();
 

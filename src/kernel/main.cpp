@@ -3,17 +3,16 @@
 
 extern "C" void _init();
 
+constexpr auto cDefaultOutputColor = os::vga::text::color{
+  os::vga::text::foreground_color::green,
+  os::vga::text::foreground_modifier::bright,
+  os::vga::text::background_color::black,
+  os::vga::text::background_modifier::none
+};
+
 extern "C" void kernel_main()
   {
-  os::vga::text::print({
-    os::vga::text::foreground_color::green,
-    os::vga::text::foreground_modifier::bright,
-    os::vga::text::background_color::black,
-    os::vga::text::background_modifier::none},
-    "Booted to C++-land"
-  );
-
-  os::vga::text::clear_screen();
+  os::vga::text::print_line(cDefaultOutputColor, "Booted to C++-land");
 
   _init();
   }
