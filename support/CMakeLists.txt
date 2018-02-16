@@ -49,3 +49,8 @@ add_custom_target(boot_debug
   COMMAND ${GDB} -s "${SYMBOL_FILE}" -ex "target remote localhost:1234" -ex "break _start" -ex "c"
   DEPENDS ${SYMBOL_FILE} iso
   )
+
+add_custom_target(disassemble
+  COMMAND ${CMAKE_OBJDUMP} -d -Mintel -C "$<TARGET_FILE:${PROJECT_NAME}>"
+  DEPENDS ${PROJECT_NAME}
+  )
