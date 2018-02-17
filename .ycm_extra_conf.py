@@ -51,6 +51,7 @@ PROJECT_FLAGS = [
     '-fno-rtti',
     '-fno-exceptions',
     '--target=x86_64-none-elf',
+    '-DUNREACHABLE=__builtin_unreachable',
 ]
 
 # Project local include paths

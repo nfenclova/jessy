@@ -19,6 +19,10 @@ include("CXXConfiguration")
 include("LinkerConfiguration")
 include("NasmConfiguration")
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  add_definitions("-DUNREACHABLE=__builtin_unreachable")
+endif()
+
 include_directories("include")
 add_subdirectory("src")
 add_subdirectory("support")
