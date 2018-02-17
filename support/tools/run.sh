@@ -3,10 +3,15 @@ set -e
 
 ODIR="$(pwd)"
 SDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
-PDIR="${SDIR}/../../"
+PDIR="$(realpath ${SDIR}/../../)"
+BDIR="${PDIR}/build"
 
-cd "${PDIR}"
+if [[ ! -d "${BDIR}" ]]; then
+  "${PDIR}/support/tools/build.sh"
+fi
 
-qemu-system-x86_64 -cdrom build/support/boot.iso 2>/dev/null
+cd ${BDIR}
 
-cd "${ODIR}"
+make boot || true
+
+cd ${ODIR}
