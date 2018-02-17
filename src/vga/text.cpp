@@ -71,13 +71,7 @@ namespace os::vga::text
      */
     auto scroll_up()
       {
-      for(auto row = 1; row < cVGATextBufferRows; ++row)
-        {
-        for(auto column = 0; column < cVGATextBufferColumns; ++column)
-          {
-          cell(column, row - 1) = cell(column, row);
-          }
-        }
+      os::core::copy_memory(&cell(0, 0), &cell(0, 1), (cVGATextBufferRows - 1) * cVGATextBufferColumns);
       gCurrentCell -= gCurrentCell % cVGATextBufferColumns;
       os::core::set_memory(&cell(), cVGAClearWord, cVGATextBufferColumns);
       }

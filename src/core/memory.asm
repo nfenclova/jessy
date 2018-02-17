@@ -87,3 +87,75 @@ _set_memory_quad_word:
 
   pop rbp
   ret
+
+; @brief Copy @p count bytes of memory pointed to by @p source to @p destination
+;
+; @param destination  The destination memory location  @rdi
+; @param source       The source memory location       @rsi
+; @param count        The number of bytes to copy      @rdx
+;
+; _set_memory_byte(uint8_t volatile * destination, uint8_t volatile const * source, size_t const count)
+global _copy_memory_byte:function
+_copy_memory_byte:
+  push rbp
+  mov rbp, rsp
+  mov rcx, rdx
+
+  rep movsb
+
+  pop rbp
+  ret
+
+; @brief Copy @p count words of memory pointed to by @p source to @p destination
+;
+; @param destination  The destination memory location  @rdi
+; @param source       The source memory location       @rsi
+; @param count        The number of words to copy      @rdx
+;
+; _set_memory_byte(uint16_t volatile * destination, uint16_t volatile const * source, size_t const count)
+global _copy_memory_word:function
+_copy_memory_word:
+  push rbp
+  mov rbp, rsp
+  mov rcx, rdx
+
+  rep movsw
+
+  pop rbp
+  ret
+
+; @brief Copy @p count dwords of memory pointed to by @p source to @p destination
+;
+; @param destination  The destination memory location  @rdi
+; @param source       The source memory location       @rsi
+; @param count        The number of dwords to copy     @rdx
+;
+; _set_memory_byte(uint32_t volatile * destination, uint32_t volatile const * source, size_t const count)
+global _copy_memory_double_word:function
+_copy_memory_double_word:
+  push rbp
+  mov rbp, rsp
+  mov rcx, rdx
+
+  rep movsd
+
+  pop rbp
+  ret
+
+; @brief Copy @p count qwords of memory pointed to by @p source to @p destination
+;
+; @param destination  The destination memory location  @rdi
+; @param source       The source memory location       @rsi
+; @param count        The number of qwords to copy     @rdx
+;
+; _set_memory_byte(uint64_t volatile * destination, uint64_t volatile const * source, size_t const count)
+global _copy_memory_quad_word:function
+_copy_memory_quad_word:
+  push rbp
+  mov rbp, rsp
+  mov rcx, rdx
+
+  rep movsq
+
+  pop rbp
+  ret
