@@ -68,3 +68,29 @@ Build Environment and First Boot
 4. Change your working directory to the ``build`` folder in the root of your
    clone. E.g. ``cd build``
 5. Start ``jessy`` in *QEMU*: ``cmake --build . --target boot``
+
+Tools
+=====
+
+``jessy`` ships with some helper tools do make development easier. All of these
+tools can be found ``support/tools/``. This section lists these tools and
+describes their functionality.
+
++----------+-----------------------------------------------------------------+
+| Tool     | Description                                                     |
++==========+=================================================================+
+| build.sh | Build ``jessy``, bootstrapping the build environment if needed  |
++----------+-----------------------------------------------------------------+
+| debug.sh | Start ``jessy`` in *QEMU*, attach *GDB* and break at ``_start`` |
++----------+-----------------------------------------------------------------+
+| run.sh   | Start ``jessy`` in *QEMU*                                       |
++----------+-----------------------------------------------------------------+
+
+``jessy`` also ships with a sourcable bash script that provides convenience
+aliases for the tools mentioned above. The aliases are called:
+
+* build
+* debug
+* run
+
+each of which calling the respective tool.
