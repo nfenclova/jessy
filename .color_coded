@@ -1,0 +1,15 @@
+-xc++
+-std=c++17
+
+-Wextra
+-Werror
+-pedantic-errors
+
+-ffreestanding
+-nostdlib
+-fno-rtti
+-fno-exceptions
+
+-DUNREACHABLE=__builtin_unreachable
+
+-Iinclude
