@@ -27,10 +27,8 @@ namespace os::core
     vga::text::print(cPanicOutputColor, ": ");
     vga::text::print(cPanicOutputColor, message);
 
-    while(true)
-      { 
-      __asm__ volatile ( "hlt" );
-      }
+    __asm__ volatile ( "hlt" );
+    __builtin_unreachable();
     }
 
   }
