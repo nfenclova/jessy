@@ -3,6 +3,8 @@
 ; === Imported Functions ===
 extern kernel_main
 
+extern _end_physical
+
 ; === Exported Functions ===
 global _start:function
 
@@ -12,9 +14,13 @@ VGABASE equ 0xb8000
 VGACOLS equ 80
 VGAROWS equ 25
 NOFVGAQ equ 500
+TWOMEGS equ (1 << 21)
+PBITPRE equ (1 << 0)
+PBITWRI equ (1 << 1)
+PBITHUG equ (1 << 7)
 
-; === Multiboot 2 Magic Header
-section .multiboot_header
+; === Boot Section - Multiboot 2 Magic Header
+section .bs_mbh progbits alloc noexec nowrite align=64
 
 header_start:
 .magic:
@@ -31,23 +37,29 @@ header_start:
     dd 8
 header_end:
 
-; === 64-bit Page Tables ====
-section .bss
-align 4096
+; === Boot Secion - Uninitialized Data
+section .bs_bss nobits alloc noexec write align=4096
 
 plm4:
-  resb 4096
-pdp:
-  resb 4096
-pd:
-  resb 4096
+  resq 512
+pdpl:
+  resq 512
+pdph:
+  resq 512
+pdh:
+  resq 512
+pdl:
+  resq 512
+
+section .bs_stack nobits alloc noexec write align=16
+
 stack_bottom:
   resb 64
 stack_top:
 
+; === Boot Section - Read-only Data
+section .bs_rodata progbits alloc noexec nowrite
 
-; === Global Read-only Data
-section .rodata
 gdt:
   dq 0
 .code: equ $ - gdt
@@ -65,13 +77,14 @@ msg_cpuid:
 msg_longmode:
   db "LONG-MODE NOT SUPPORTED",0
 
-; === Global Read-write Data
-section .data
+; === Boot Section - Read Write Data
+section .bs_data progbits alloc noexec write
+
 vga_buffer:
   dd VGABASE
  
-; === 32-bit Bootstrap Code
-section .text
+; === Boot Section - Program Code
+section .bs_text progbits alloc exec nowrite align=16
 bits 32
 
 _print:
@@ -184,23 +197,37 @@ check_long_mode_is_supported:
   call _panic
 
 initialize_page_table_structure:
-  mov eax, pdp
+  mov eax, pdpl
   or eax, 0x3
-  mov [plm4], eax
+  mov [plm4 + ((0x0000000000100000 >> 39) & 0x1ff) * 8], eax
 
-  mov eax, pd
+  mov eax, pdph
   or eax, 0x3
-  mov [pdp], eax
+  mov [plm4 + ((0xffffffff80100000 >> 39) & 0x1ff) * 8], eax
+
+  mov eax, pdl
+  or eax, 0x3
+  mov [pdpl + ((0x0000000000100000 >> 30) & 0x1ff) * 8], eax
+
+  mov eax, pdh
+  or eax, 0x3
+  mov [pdph + ((0xFFFFFFFF80100000 >> 30) & 0x1ff) * 8], eax
 
   xor ecx, ecx
+
+  mov esi, _end_physical
+  shr esi, 21
+  add esi, 1
+
 .map_pt_pages:
-  mov eax, 0x20000
+  mov eax, TWOMEGS
   mul ecx
-  or  eax, 0x83
-  mov [pd + ecx * 8], eax
+  or  eax, PBITPRE | PBITWRI | PBITHUG
+  mov [pdl + ecx], eax
+  mov [pdh + ecx], eax
 
   inc ecx
-  cmp ecx, 512
+  cmp ecx, esi
   jne .map_pt_pages
 
   ret
@@ -224,8 +251,8 @@ enable_paging:
 
   ret
 
-; === 64-bit Bootstrap Code ===
-section .text
+; === Long Mode - Entry Code
+section .bs_text progbits alloc exec nowrite
 bits 64
 
 _start_long:

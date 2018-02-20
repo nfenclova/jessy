@@ -118,7 +118,7 @@ set(CMAKE_SYSTEM_PROCESSOR
   )
 
 set(CMAKE_CXX_FLAGS_INIT
-  "-ffreestanding -nostdlib -static -m64 -mno-red-zone -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
+  "-ffreestanding -nostdlib -static -m64 -mno-red-zone -mcmodel=large -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
   )
 
 find_program(CMAKE_CXX_COMPILER
