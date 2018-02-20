@@ -1,12 +1,17 @@
 ENTRY(_start)
 
+KERNEL_VMA = -2048M;
+KERNEL_LMA = 1M;
+
 SECTIONS
 {
   /*
    * Bootstrap
    */
-  . = 1M;
+  . = KERNEL_LMA;
+
   _start_physical = .;
+  _start_virtual = . + KERNEL_VMA;
 
   .bs_mbh :
   {
@@ -38,72 +43,63 @@ SECTIONS
     *(.bs_stack)
   }
 
-  . = ALIGN(4096);
-  _end_boot = .;
-
   /*
    * Kernel
    */
 
-  . += 0xFFFFFFFF80000000;
-  _start_virtual = .;
-  .init : AT(_end_boot)
+  . = ALIGN(4K);
+  . += KERNEL_VMA;
+
+  .init ALIGN(4K) : AT(ADDR (.init) - KERNEL_VMA)
   {
     KEEP(*(.init))
   }
 
-  .fini :
+  .fini ALIGN(4K) : AT(ADDR (.fini) - KERNEL_VMA)
   {
     KEEP(*(.fini))
-    . = ALIGN(4096);
   }
 
-  .ctors :
+  .text ALIGN(4K) : AT(ADDR (.text) - KERNEL_VMA)
+  {
+    *(.text*)
+  }
+
+  .rodata ALIGN(4K) : AT (ADDR (.rodata) - KERNEL_VMA)
+  {
+    *(.rodata)
+    *(.rodata.*)
+  }
+
+  .ctors ALIGN(4K) : AT (ADDR (.ctors) - KERNEL_VMA)
   {
     KEEP(*crtbegin.o(.ctors))
     KEEP(*(EXCLUDE_FILE (*crtend.o) .ctors))
     KEEP(*(SORT(.ctors.*)))
     KEEP(*crtend.o(.ctors))
-    . = ALIGN(4096);
   }
 
-  .dtors :
+  .dtors ALIGN(4K) : AT (ADDR (.dtors) - KERNEL_VMA)
   {
     KEEP(*crtbegin.o(.dtors))
     KEEP(*(EXCLUDE_FILE (*crtend.o) .dtors))
     KEEP(*(SORT(.dtors.*)))
     KEEP(*crtend.o(.dtors))
-    . = ALIGN(4096);
   }
 
-  .text :
-  {
-    *(.text*)
-    . = ALIGN(4096);
-  }
-
-  .rodata :
-  {
-    *(.rodata)
-    *(.rodata.*)
-    . = ALIGN(4096);
-  }
-
-  .data :
+  .data ALIGN(4K) : AT (ADDR (.data) - KERNEL_VMA)
   {
     *(.data)
-    . = ALIGN(4096);
   }
 
-  .bss :
+  .bss ALIGN(4K) : AT (ADDR (.bss) - KERNEL_VMA)
   {
     *(COMMON)
     *(.bss*)
-    . = ALIGN(4096);
   }
 
-  /DISCARD/ : { *(.comment) }
+  _end_virtual = ADDR(.bss) + SIZEOF(.bss);
+  _end_physical = _end_virtual - KERNEL_VMA;
 
-  _end_virtual = .;
-  _end_physical = (LOADADDR (.bss) + SIZEOF(.bss) + 0xFFF) & 0xFFFFFFFFFFFFF000;
+  /DISCARD/ : { *(.comment) }
 }
