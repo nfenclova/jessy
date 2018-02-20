@@ -43,6 +43,11 @@ namespace os::vga::text
      * The number of rows in the VGA text buffer
      */
     auto constexpr cVGATextBufferRows = 25;
+
+    constexpr char const * cHexDigitStrings[] = {
+      "0", "1", "2", "3", "4", "5", "6", "7",
+      "8", "9", "a", "b", "c", "d", "e", "f",
+    };
     }
 
   /**
@@ -115,6 +120,17 @@ namespace os::vga::text
       {
       cell() = static_cast<os::core::uint16_t>(color) + text[idx];
       move_to_next_cell();
+      }
+    }
+
+  void print(color color, os::core::byte_t const * const pointer)
+    {
+    print(color, "0x");
+    for(auto nibble = 1; nibble <= 16; ++nibble)
+      {
+      auto const address = reinterpret_cast<os::core::uintptr_t>(pointer);
+      auto const value = (address >> ((16 - nibble) * 4)) & 0xf;
+      print(color, cHexDigitStrings[value]);
       }
     }
 
