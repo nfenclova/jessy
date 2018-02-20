@@ -3,6 +3,7 @@
 ; === Imported Functions ===
 extern kernel_main
 
+; === Imported Constants
 extern _end_physical
 
 ; === Exported Functions ===
