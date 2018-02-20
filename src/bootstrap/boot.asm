@@ -55,7 +55,7 @@ pdl:
 section .bs_stack nobits alloc noexec write align=16
 
 stack_bottom:
-  resb 64
+  resb 1 << 16
 stack_top:
 
 ; === Boot Section - Read-only Data
@@ -212,7 +212,7 @@ initialize_page_table_structure:
 
   mov eax, pdh
   or eax, 0x3
-  mov [pdph + ((0xFFFFFFFF80100000 >> 30) & 0x1ff) * 8], eax
+  mov [pdph + ((0xffffffff80100000 >> 30) & 0x1ff) * 8], eax
 
   xor ecx, ecx
 
@@ -224,8 +224,8 @@ initialize_page_table_structure:
   mov eax, TWOMEGS
   mul ecx
   or  eax, PBITPRE | PBITWRI | PBITHUG
-  mov [pdl + ecx], eax
-  mov [pdh + ecx], eax
+  mov [pdl + ecx * 8], eax
+  mov [pdh + ecx * 8], eax
 
   inc ecx
   cmp ecx, esi
