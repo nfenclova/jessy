@@ -2,7 +2,7 @@
 
 string(APPEND
   CMAKE_CXX_FLAGS
-  " -Wextra -Werror -pedantic-errors"
+  " -Wextra -Werror -pedantic-errors -flto"
   )
 set(CMAKE_CXX_STANDARD
   "17"

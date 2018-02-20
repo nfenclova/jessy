@@ -108,38 +108,38 @@ if(NOT X86_64_ELF_GCC)
     FORCE
     )
   mark_as_advanced(CROSS_GCC_CRTEND)
+
+  set(CMAKE_SYSTEM_NAME
+    "Generic"
+    )
+  set(CMAKE_SYSTEM_PROCESSOR
+    "x86_64"
+    )
+
+  set(CMAKE_CXX_FLAGS_INIT
+    "-ffreestanding -nostdlib -static -m64 -mno-red-zone -mcmodel=large -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
+    )
+
+  find_program(CMAKE_CXX_COMPILER
+    "${CROSS_GCC_PREFIX}g++"
+    )
+
+  set(CMAKE_CXX_COMPILER_TARGET
+    "x86_64-none-none-elf"
+    )
+
+  set(CMAKE_C_SIZEOF_DATA_PTR
+    "8"
+    CACHE STRING
+    ""
+    FORCE
+    )
+  mark_as_advanced(CMAKE_C_SIZEOF_DATA_PTR)
+
+  set(CMAKE_EXE_LINKER_FLAGS
+    "-Wl,-n,--gc-sections,--build-id=none"
+    CACHE STRING
+    ""
+    FORCE
+    )
 endif()
-
-set(CMAKE_SYSTEM_NAME
-  "Generic"
-  )
-set(CMAKE_SYSTEM_PROCESSOR
-  "x86_64"
-  )
-
-set(CMAKE_CXX_FLAGS_INIT
-  "-ffreestanding -nostdlib -static -m64 -mno-red-zone -mcmodel=large -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions"
-  )
-
-find_program(CMAKE_CXX_COMPILER
-  "clang++"
-  )
-
-set(CMAKE_CXX_COMPILER_TARGET
-  "x86_64-none-none-elf"
-  )
-
-set(CMAKE_C_SIZEOF_DATA_PTR
-  "8"
-  CACHE STRING
-  ""
-  FORCE
-  )
-mark_as_advanced(CMAKE_C_SIZEOF_DATA_PTR)
-
-set(CMAKE_EXE_LINKER_FLAGS
-  "-Wl,-n,--gc-sections,--build-id=none"
-  CACHE STRING
-  ""
-  FORCE
-  )

@@ -54,10 +54,10 @@ namespace os::vga::text
       ) << 8;
       }
 
-    foreground_color foreground_color;
-    foreground_modifier foreground_modifier;
-    background_color background_color;
-    background_modifier background_modifier;
+    os::vga::text::foreground_color foreground_color;
+    os::vga::text::foreground_modifier foreground_modifier;
+    os::vga::text::background_color background_color;
+    os::vga::text::background_modifier background_modifier;
     };
 
   void print(color color, char const * const text);

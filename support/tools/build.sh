@@ -28,7 +28,7 @@ function create_bdir()
 
     cmake .. \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchains/ClangCrossToolchain.cmake
+      -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchains/GNUCrossToolchain.cmake
   fi
 }
 
