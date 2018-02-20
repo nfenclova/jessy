@@ -20,7 +20,7 @@ namespace os::core
   [[noreturn]]
   void panic(panic_location const location, char const * const message)
     {
-    vga::text::print(cPanicOutputColor, "!!!PANIC!!! @ ");
+    vga::text::print(cPanicOutputColor, "[PANIC] ");
     vga::text::print(cPanicOutputColor, location.function);
     vga::text::print(cPanicOutputColor, ":");
     vga::text::print(cPanicOutputColor, location.file);
