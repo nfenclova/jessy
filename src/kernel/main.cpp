@@ -14,7 +14,7 @@ constexpr auto cDefaultOutputColor = os::vga::text::color{
 
 extern "C" void kernel_main()
   {
-  os::vga::text::print_line(cDefaultOutputColor, "Booted to C++-land");
+  os::vga::text::print_line(cDefaultOutputColor, "[JESSY] Entered kernel_main");
 
   os::vga::text::print(cDefaultOutputColor, "[PHYSM] ");
   os::vga::text::print(cDefaultOutputColor, os::bootstrap::cPhysicalMemoryStartAddress);
