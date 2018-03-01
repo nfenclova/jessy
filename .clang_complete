@@ -2,3 +2,4 @@
 -std=c++17
 -Wextra
 -pedantic
+-Wno-gnu-include-next
