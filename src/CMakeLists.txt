@@ -3,6 +3,7 @@
 add_subdirectory("bootstrap")
 add_subdirectory("core")
 add_subdirectory("kernel")
+add_subdirectory("multiboot")
 add_subdirectory("runtime")
 add_subdirectory("vga")
 
@@ -13,6 +14,7 @@ add_executable(${PROJECT_NAME}
   $<TARGET_OBJECTS:bootstrap>
   $<TARGET_OBJECTS:core>
   $<TARGET_OBJECTS:kernel>
+  $<TARGET_OBJECTS:multiboot>
   $<TARGET_OBJECTS:vga>
 
   ${CROSS_GCC_CRTEND}
