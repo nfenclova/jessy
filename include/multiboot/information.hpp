@@ -7,38 +7,44 @@
 namespace os::multiboot
   {
 
+  template<typename ... Handlers>
+  struct tag_visitor : Handlers...
+    {
+    template<typename T>
+    void operator()(T const &) const { }
+
+    using Handlers::operator() ...;
+    };
+
+  template<typename ... Handlers>
+  tag_visitor(Handlers ...) -> tag_visitor<Handlers...>;
+
   struct information
     {
     information() = delete;
 
-    /**
-     * @brief Check if the Multiboot 2 information structure contains the given tag type
-     */
-    template<typename TagType>
-    bool has() const noexcept
+    template<typename ... Handlers>
+    void accept(tag_visitor<Handlers ...> && visitor) const
       {
-      return has(TagType::type);
-      }
-
-    template<typename TagType>
-    TagType const & get() const noexcept
-      {
-      return reinterpret_cast<TagType const &>(get(TagType::type));
+      auto tag = reinterpret_cast<tags::tag_header const *>(this + 1);
+      while(tag->type != tags::type::end)
+        {
+        switch(tag->type)
+          {
+#define CASE(Type) case tags::Type::type: visitor(reinterpret_cast<tags::Type const &>(*tag)); break;
+          CASE(boot_command_line)
+          CASE(boot_loader_name)
+          CASE(basic_memory_information)
+          CASE(efi32_image_handle_pointer)
+#undef CASE
+          default:
+              visitor(tags::tag{});
+          }
+        tag += (tag->size + sizeof(tags::tag_header) - 1) / sizeof(tags::tag_header);
+        }
       }
 
     private:
-      struct tag_header
-        {
-        tags::type const type;
-        os::core::uint32_t const size;
-        };
-
-      bool has(tags::type type) const noexcept;
-
-      tags::tag const * find(tags::type type) const noexcept;
-
-      tags::tag const & get(tags::type type) const noexcept;
-
       os::core::uint32_t total_size; 
       os::core::uint32_t reserved;
     };

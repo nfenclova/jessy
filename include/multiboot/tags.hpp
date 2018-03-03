@@ -29,54 +29,71 @@ namespace os::multiboot::tags
     efi_boot_services_not_terminated,
     efi32_image_handle_pointer,
     efi64_image_handle_pointer,
-    image_load_base_address
+    image_load_base_address,
+    unknown,
     };
 
-  struct alignas(8) tag { };
-
-  struct boot_command_line : tag
+  template<type Type = type::unknown>
+  struct alignas(8) tag
     {
-    static auto constexpr type = tags::type::boot_command_line;
+    static auto constexpr type = Type;
+    };
 
-    operator char const * () const;
+  struct tag_header
+    {
+    tags::type const type{};
+    core::uint32_t const size{};
+    };
+
+  struct boot_command_line : tag<type::boot_command_line>
+    {
+    char const * command_line() const noexcept { return &m_commandLine; }
 
     private:
-      char const data{};
+      tag_header const m_header{};
+      char const m_commandLine{};
     };
 
-  struct boot_loader_name : tag
+  struct boot_loader_name : tag<type::boot_loader_name>
     {
-    static auto constexpr type = tags::type::boot_loader_name;
-
-    operator char const * () const;
+    char const * name() const noexcept { return &m_name; }
 
     private:
-      char const data{};
+      tag_header const m_header{};
+      char const m_name{};
     };
 
-  struct module : tag
+  struct module : tag<type::module>
     {
-    static auto constexpr type = tags::type::module;
+    core::uint32_t const & start_address() const noexcept { return m_startAddress; }
+    core::uint32_t const & end_address() const noexcept { return m_endAddress; }
+    char const * string() const noexcept { return & m_string; } 
 
-    os::core::uint32_t const start_address;
-    os::core::uint32_t const end_address;
-    os::core::uint8_t const * const string;
+    private:
+      tag_header const m_header{};
+      os::core::uint32_t const m_startAddress{};
+      os::core::uint32_t const m_endAddress{};
+      char const m_string{};
     };
 
-  struct basic_memory_information : tag
+  struct basic_memory_information : tag<type::basic_memory_information>
     {
-    static auto constexpr type = tags::type::basic_memory_information;
+    core::uint32_t const & lower_memory() const noexcept { return m_lowerMemory; }
+    core::uint32_t const & upper_memory() const noexcept { return m_upperMemory; }
 
-    os::core::uint32_t const lower_memory;
-    os::core::uint32_t const upper_memory;
+    private:
+      tag_header const m_header{};
+      os::core::uint32_t const m_lowerMemory{};
+      os::core::uint32_t const m_upperMemory{};
     };
 
-  struct efi32_image_handle_pointer : tag
+  struct efi32_image_handle_pointer : tag<type::efi32_image_handle_pointer>
     {
-    static auto constexpr type = tags::type::efi32_image_handle_pointer;
+    core::uintptr_t pointer() const noexcept { return m_pointer; }
 
-    os::core::uint32_t const lower_memory;
-    os::core::uint32_t const upper_memory;
+    private:
+      tag_header const m_header{};
+      core::uint32_t const m_pointer{};
     };
 
   }

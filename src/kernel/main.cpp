@@ -24,33 +24,34 @@ namespace
     print(cDefaultOutputColor, "[PHYSM] ");
     print(cDefaultOutputColor, cPhysicalMemoryStartAddress);
     print(cDefaultOutputColor, " - ");
-    print(cDefaultOutputColor, cPhysicalMemoryEndAddress);
-
-    print_line(cDefaultOutputColor, "");
+    print_line(cDefaultOutputColor, cPhysicalMemoryEndAddress);
 
     print(cDefaultOutputColor, "[VIRTM] ");
     print(cDefaultOutputColor, cVirtualMemoryStartAddress);
     print(cDefaultOutputColor, " - ");
-    print(cDefaultOutputColor, cVirtualMemoryEndAddress);
-
-    print_line(cDefaultOutputColor, "");
+    print_line(cDefaultOutputColor, cVirtualMemoryEndAddress);
     }
 
-  void print_bootloader_info(os::multiboot::information const * info)
+  void print_multiboot_information(os::multiboot::information const * info)
     {
     using os::vga::text::print, os::vga::text::print_line;
 
-    if(info->has<os::multiboot::tags::boot_loader_name>())
-      {
-      print(cDefaultOutputColor, "[BOOTI] Loaded by: ");
-      print_line(cDefaultOutputColor, info->get<os::multiboot::tags::boot_loader_name>());
-      }
-
-    if(info->has<os::multiboot::tags::boot_command_line>())
-      {
-      print(cDefaultOutputColor, "[BOOTI] Using command args: ");
-      print_line(cDefaultOutputColor, info->get<os::multiboot::tags::boot_command_line>());
-      }
+    info->accept(os::multiboot::tag_visitor{
+      [](os::multiboot::tags::boot_loader_name const & tag) {
+        print(cDefaultOutputColor, "[BOOTI] Loaded by: ");
+        print_line(cDefaultOutputColor, tag.name());
+      },
+      [](os::multiboot::tags::boot_command_line const & tag) {
+        print(cDefaultOutputColor, "[BOOTI] Using command args: ");
+        print_line(cDefaultOutputColor, tag.command_line());
+      },
+      [](os::multiboot::tags::basic_memory_information const & tag) {
+        print(cDefaultOutputColor, "[BOOTI] Lower memory (in kB): ");
+        print_line(cDefaultOutputColor, tag.lower_memory());
+        print(cDefaultOutputColor, "[BOOTI] Upper memory (in kB): ");
+        print_line(cDefaultOutputColor, tag.upper_memory());
+      },
+    });
     }
   }
 
@@ -60,7 +61,7 @@ extern "C" void kernel_main(os::multiboot::information const * multiboot_informa
 
   print_line(cDefaultOutputColor, "[JESSY] Entered kernel_main");
 
-  print_bootloader_info(multiboot_information);
+  print_multiboot_information(multiboot_information);
 
   print_memory_info();
 
