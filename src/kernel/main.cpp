@@ -38,25 +38,25 @@ namespace
 
     info->accept(os::multiboot::tag_visitor{
       [](os::multiboot::tags::boot_loader_name const & tag) {
-        print(cDefaultOutputColor, "[BOOTI] Loaded by: ");
+        print(cDefaultOutputColor, "[MBOOT] Loaded by: ");
         print_line(cDefaultOutputColor, tag.name());
       },
       [](os::multiboot::tags::boot_command_line const & tag) {
-        print(cDefaultOutputColor, "[BOOTI] Using command args: ");
+        print(cDefaultOutputColor, "[MBOOT] Using command args: ");
         print_line(cDefaultOutputColor, tag.command_line());
       },
       [](os::multiboot::tags::basic_memory_information const & tag) {
-        print(cDefaultOutputColor, "[BOOTI] Lower memory (in kB): ");
+        print(cDefaultOutputColor, "[MBOOT] Lower memory (in kB): ");
         print_line(cDefaultOutputColor, tag.lower_memory());
-        print(cDefaultOutputColor, "[BOOTI] Upper memory (in kB): ");
+        print(cDefaultOutputColor, "[MBOOT] Upper memory (in kB): ");
         print_line(cDefaultOutputColor, tag.upper_memory());
       },
       [](os::multiboot::tags::boot_device const & tag) {
-        print(cDefaultOutputColor, "[BOOTI] BIOS boot device: ");
+        print(cDefaultOutputColor, "[MBOOT] BIOS boot device: ");
         print_line(cDefaultOutputColor, tag.bios_device());
-        print(cDefaultOutputColor, "[BOOTI] BIOS boot partition: ");
+        print(cDefaultOutputColor, "[MBOOT] BIOS boot partition: ");
         print_line(cDefaultOutputColor, tag.partition());
-        print(cDefaultOutputColor, "[BOOTI] BIOS boot sub-partition: ");
+        print(cDefaultOutputColor, "[MBOOT] BIOS boot sub-partition: ");
         print_line(cDefaultOutputColor, tag.sub_partition());
       }
     });
