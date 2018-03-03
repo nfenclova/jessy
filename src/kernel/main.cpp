@@ -51,6 +51,14 @@ namespace
         print(cDefaultOutputColor, "[BOOTI] Upper memory (in kB): ");
         print_line(cDefaultOutputColor, tag.upper_memory());
       },
+      [](os::multiboot::tags::boot_device const & tag) {
+        print(cDefaultOutputColor, "[BOOTI] BIOS boot device: ");
+        print_line(cDefaultOutputColor, tag.bios_device());
+        print(cDefaultOutputColor, "[BOOTI] BIOS boot partition: ");
+        print_line(cDefaultOutputColor, tag.partition());
+        print(cDefaultOutputColor, "[BOOTI] BIOS boot sub-partition: ");
+        print_line(cDefaultOutputColor, tag.sub_partition());
+      }
     });
     }
   }

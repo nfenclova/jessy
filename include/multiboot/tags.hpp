@@ -71,8 +71,8 @@ namespace os::multiboot::tags
 
     private:
       tag_header const m_header{};
-      os::core::uint32_t const m_startAddress{};
-      os::core::uint32_t const m_endAddress{};
+      core::uint32_t const m_startAddress{};
+      core::uint32_t const m_endAddress{};
       char const m_string{};
     };
 
@@ -83,8 +83,21 @@ namespace os::multiboot::tags
 
     private:
       tag_header const m_header{};
-      os::core::uint32_t const m_lowerMemory{};
-      os::core::uint32_t const m_upperMemory{};
+      core::uint32_t const m_lowerMemory{};
+      core::uint32_t const m_upperMemory{};
+    };
+
+  struct boot_device : tag<type::boot_device>
+    {
+    core::uint32_t const & bios_device() const noexcept { return m_biosDevice; }
+    core::uint32_t const & partition() const noexcept { return m_partition; }
+    core::uint32_t const & sub_partition() const noexcept { return m_subPartition; }
+
+    private:
+      tag_header const m_header{};
+      core::uint32_t const m_biosDevice{};
+      core::uint32_t const m_partition{};
+      core::uint32_t const m_subPartition{};
     };
 
   struct efi32_image_handle_pointer : tag<type::efi32_image_handle_pointer>
