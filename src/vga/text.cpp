@@ -123,7 +123,7 @@ namespace os::vga::text
       }
     }
 
-  void print(color color, os::core::byte_t const * const pointer)
+  void print(color color, void const * const pointer)
     {
     print(color, "0x");
     for(auto nibble = 1; nibble <= 16; ++nibble)
@@ -134,9 +134,30 @@ namespace os::vga::text
       }
     }
 
+  void print(color color, core::uint32_t const value)
+    {
+    if(value)
+      {
+      print(color, value / 10);
+      print(color, cHexDigitStrings[value % 10]);
+      }
+    }
+
   void print_line(color color, char const * const text)
     {
     print(color, text);
+    move_to_next_line();
+    }
+
+  void print_line(color color, void const * const pointer)
+    {
+    print(color, pointer);
+    move_to_next_line();
+    }
+
+  void print_line(color color, core::uint32_t const value)
+    {
+    print(color, value);
     move_to_next_line();
     }
 
