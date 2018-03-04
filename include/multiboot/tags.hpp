@@ -8,4 +8,7 @@
 #include "multiboot/tags/boot_device.hpp"
 #include "multiboot/tags/memory_map.hpp"
 
+#undef MULTIBOOT_TAG_CLASS_BEGIN
+#undef MULTIBOOT_TAG_CLASS_END
+
 #endif
