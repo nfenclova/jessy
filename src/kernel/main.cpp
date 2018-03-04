@@ -58,6 +58,16 @@ namespace
         print_line(cDefaultOutputColor, tag.partition());
         print(cDefaultOutputColor, "[MBOOT] BIOS boot sub-partition: ");
         print_line(cDefaultOutputColor, tag.sub_partition());
+      },
+      [](os::multiboot::tags::memory_map const & tag) {
+        print_line(cDefaultOutputColor, "[MBOOT] Memory map:");
+        for(auto const & entry : tag)
+          {
+          print(cDefaultOutputColor, "    ");
+          print(cDefaultOutputColor, entry.length());
+          print(cDefaultOutputColor, " bytes @ ");
+          print_line(cDefaultOutputColor, entry.base_address());
+          }
       }
     });
     }

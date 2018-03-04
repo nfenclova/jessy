@@ -36,6 +36,7 @@ namespace os::multiboot
           CASE(boot_loader_name)
           CASE(basic_memory_information)
           CASE(boot_device)
+          CASE(memory_map)
           CASE(efi32_image_handle_pointer)
 #undef CASE
           default:
