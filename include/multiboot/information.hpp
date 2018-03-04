@@ -37,7 +37,6 @@ namespace os::multiboot
           CASE(basic_memory_information)
           CASE(boot_device)
           CASE(memory_map)
-          CASE(efi32_image_handle_pointer)
 #undef CASE
           default:
               visitor(tags::tag{});
@@ -47,8 +46,8 @@ namespace os::multiboot
       }
 
     private:
-      os::core::uint32_t total_size; 
-      os::core::uint32_t reserved;
+      core::uint32_t total_size; 
+      core::uint32_t reserved;
     };
 
   }
