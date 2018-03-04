@@ -33,6 +33,38 @@ namespace os::multiboot::tags
     unknown,
     };
 
+  char const * to_string(type type)
+    {
+#define CASE(Enumerator) case type::Enumerator: return #Enumerator;
+    switch(type)
+      {
+      CASE(end)
+      CASE(boot_command_line)
+      CASE(boot_loader_name)
+      CASE(module)
+      CASE(basic_memory_information)
+      CASE(boot_device)
+      CASE(memory_map)
+      CASE(vbe_information)
+      CASE(framebuffer_information)
+      CASE(elf_symbols)
+      CASE(apm_table)
+      CASE(efi32_system_table_pointer)
+      CASE(efi64_system_table_pointer)
+      CASE(smbios_table)
+      CASE(acpi_old_rsdp)
+      CASE(acpi_new_rsdp)
+      CASE(networking_information)
+      CASE(efi_memory_map)
+      CASE(efi_boot_services_not_terminated)
+      CASE(efi32_image_handle_pointer)
+      CASE(efi64_image_handle_pointer)
+      CASE(image_load_base_address)
+      CASE(unknown)
+      }
+#undef CASE
+    }
+
   }
 
 #endif

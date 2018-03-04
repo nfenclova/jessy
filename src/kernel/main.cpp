@@ -64,9 +64,12 @@ namespace
         for(auto const & entry : tag)
           {
           print(cDefaultOutputColor, "    ");
+          print(cDefaultOutputColor, entry.base_address());
+          print(cDefaultOutputColor, " : ");
+          print(cDefaultOutputColor, to_string(entry.type()));
+          print(cDefaultOutputColor, " - ");
           print(cDefaultOutputColor, entry.length());
-          print(cDefaultOutputColor, " bytes @ ");
-          print_line(cDefaultOutputColor, entry.base_address());
+          print_line(cDefaultOutputColor, " bytes");
           }
       }
     });

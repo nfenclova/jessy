@@ -12,16 +12,25 @@ namespace os::multiboot::tags
     core::uint32_t const m_entryVersion{};
 
     public:
+      enum struct entry_type : core::uint32_t
+        {
+        available = 1,
+        reserved = 2,
+        acpi_reclaimable = 3,
+        nvs = 4,
+        bad_ram = 5,
+        };
+
       struct entry
         {
         void const * const & base_address() const noexcept { return m_baseAddress; }
         core::uint64_t const & length() const noexcept { return m_length; }
-        core::uint32_t const & type() const noexcept { return m_type; }
+        entry_type const & type() const noexcept { return m_type; }
 
         private:
           void const * const m_baseAddress{};
           core::uint64_t const m_length{};
-          core::uint32_t const m_type{};
+          entry_type const m_type{};
           core::uint32_t const m_reserved{};
         };
 
@@ -31,6 +40,20 @@ namespace os::multiboot::tags
       entry const * begin() const noexcept { return reinterpret_cast<entry const *>(this + 1); }
       entry const * end() const noexcept { return begin() + entries(); }
   MULTIBOOT_TAG_CLASS_END
+
+  char const * to_string(memory_map::entry_type type)
+    {
+#define CASE(Enumerator) case memory_map::entry_type::Enumerator: return #Enumerator;
+    switch(type)
+      {
+      CASE(available)
+      CASE(reserved)
+      CASE(acpi_reclaimable)
+      CASE(nvs)
+      CASE(bad_ram)
+      }
+#undef CASE
+    }
 
   }
 
