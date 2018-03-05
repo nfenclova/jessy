@@ -9,7 +9,7 @@ namespace os::multiboot::tags
   template<type Type = type::unknown>
   struct alignas(8) tag
     {
-    static auto constexpr type = Type;
+    static auto constexpr tag_type = Type;
     };
 
   struct tag_header

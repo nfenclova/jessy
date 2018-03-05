@@ -31,12 +31,13 @@ namespace os::multiboot
         {
         switch(tag->type)
           {
-#define CASE(Type) case tags::Type::type: visitor(reinterpret_cast<tags::Type const &>(*tag)); break;
+#define CASE(Type) case tags::Type::tag_type: visitor(reinterpret_cast<tags::Type const &>(*tag)); break;
           CASE(boot_command_line)
           CASE(boot_loader_name)
           CASE(basic_memory_information)
           CASE(boot_device)
           CASE(memory_map)
+          CASE(framebuffer_information)
 #undef CASE
           default:
               visitor(tags::tag{});

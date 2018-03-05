@@ -71,6 +71,26 @@ namespace
           print(cDefaultOutputColor, entry.length());
           print_line(cDefaultOutputColor, " bytes");
           }
+      },
+      [](os::multiboot::tags::framebuffer_information const & tag) {
+        print_line(cDefaultOutputColor, "[MBOOT] Framebuffer information:");
+        print(cDefaultOutputColor, "    type: ");
+        print_line(cDefaultOutputColor, to_string(tag.type()));
+        switch(tag.type())
+          {
+          case os::multiboot::tags::framebuffer_information::framebuffer_type::ega_text:
+            print(cDefaultOutputColor, "    width: ");
+            print(cDefaultOutputColor, tag.width());
+            print_line(cDefaultOutputColor, " characters");
+            print(cDefaultOutputColor, "    height: ");
+            print(cDefaultOutputColor, tag.height());
+            print_line(cDefaultOutputColor, " characters");
+            print(cDefaultOutputColor, "    bytes per line: ");
+            print_line(cDefaultOutputColor, tag.pitch());
+            break;
+          default:
+            break;
+          }
       }
     });
     }
