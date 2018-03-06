@@ -46,7 +46,7 @@ add_custom_target(boot
 
 add_custom_target(boot_debug
   COMMAND ${QEMU_SYSTEM_X86_64} -S -s -cdrom ${ISO_FILE} 2>/dev/null &
-  COMMAND ${GDB} -s "${SYMBOL_FILE}" -ex "target remote localhost:1234" -ex "break _start" -ex "c"
+  COMMAND ${GDB} -s "${SYMBOL_FILE}" -q -ex "target remote localhost:1234" -ex "break _start" -ex "c"
   DEPENDS ${SYMBOL_FILE} iso
   )
 
