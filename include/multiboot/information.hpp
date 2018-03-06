@@ -38,6 +38,7 @@ namespace os::multiboot
           CASE(boot_device)
           CASE(memory_map)
           CASE(framebuffer_information)
+          CASE(elf_symbols)
 #undef CASE
           default:
               visitor(tags::tag{});
@@ -47,7 +48,7 @@ namespace os::multiboot
       }
 
     private:
-      core::uint32_t total_size; 
+      core::uint32_t total_size;
       core::uint32_t reserved;
     };
 

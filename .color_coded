@@ -9,7 +9,9 @@
 -nostdlib
 -fno-rtti
 -fno-exceptions
+--sysroot=/usr/lib/gcc/x86_64-elf/7.3.0
 
 -DUNREACHABLE=__builtin_unreachable
 
 -Iinclude
+

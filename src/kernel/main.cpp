@@ -91,7 +91,23 @@ namespace
           default:
             break;
           }
-      }
+      },
+      [](os::multiboot::tags::elf_symbols const & tag) {
+        print_line(cDefaultOutputColor, "[MBOOT] Executable sections:");
+        for(auto const & entry : tag)
+          {
+          if(entry.flags() & os::multiboot::tags::elf_symbols::section_flags::executable)
+            {
+            print(cDefaultOutputColor, "    ");
+            print(cDefaultOutputColor, tag.name(entry));
+            print(cDefaultOutputColor, ": ");
+            print(cDefaultOutputColor, entry.address());
+            print(cDefaultOutputColor, " - ");
+            print(cDefaultOutputColor, entry.size());
+            print_line(cDefaultOutputColor, " bytes - ");
+            }
+          }
+      },
     });
     }
   }
