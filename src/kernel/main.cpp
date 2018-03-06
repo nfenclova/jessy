@@ -46,30 +46,35 @@ namespace
         print_line(cDefaultOutputColor, tag.command_line());
       },
       [](os::multiboot::tags::basic_memory_information const & tag) {
-        print(cDefaultOutputColor, "[MBOOT] Lower memory (in kB): ");
-        print_line(cDefaultOutputColor, tag.lower_memory());
-        print(cDefaultOutputColor, "[MBOOT] Upper memory (in kB): ");
-        print_line(cDefaultOutputColor, tag.upper_memory());
+        print_line(cDefaultOutputColor, "[MBOOT] Memory information:");
+        print(cDefaultOutputColor, "    Lower memory: ");
+        print(cDefaultOutputColor, tag.lower_memory());
+        print_line(cDefaultOutputColor, " kB");
+        print(cDefaultOutputColor, "    Upper memory: ");
+        print(cDefaultOutputColor, tag.upper_memory());
+        print_line(cDefaultOutputColor, " kB");
       },
       [](os::multiboot::tags::boot_device const & tag) {
-        print(cDefaultOutputColor, "[MBOOT] BIOS boot device: ");
+        print_line(cDefaultOutputColor, "[MBOOT] BIOS boot device: ");
+        print(cDefaultOutputColor, "    device number:");
         print_line(cDefaultOutputColor, tag.bios_device());
-        print(cDefaultOutputColor, "[MBOOT] BIOS boot partition: ");
+        print(cDefaultOutputColor, "    partition number: ");
         print_line(cDefaultOutputColor, tag.partition());
-        print(cDefaultOutputColor, "[MBOOT] BIOS boot sub-partition: ");
+        print(cDefaultOutputColor, "    sub-partition number: ");
         print_line(cDefaultOutputColor, tag.sub_partition());
       },
       [](os::multiboot::tags::memory_map const & tag) {
-        print_line(cDefaultOutputColor, "[MBOOT] Memory map:");
+        print_line(cDefaultOutputColor, "[MBOOT] Available memory:");
         for(auto const & entry : tag)
           {
-          print(cDefaultOutputColor, "    ");
-          print(cDefaultOutputColor, entry.base_address());
-          print(cDefaultOutputColor, " : ");
-          print(cDefaultOutputColor, to_string(entry.type()));
-          print(cDefaultOutputColor, " - ");
-          print(cDefaultOutputColor, entry.length());
-          print_line(cDefaultOutputColor, " bytes");
+          if(entry.type() == os::multiboot::tags::memory_map::entry_type::available)
+            {
+            print(cDefaultOutputColor, "    ");
+            print(cDefaultOutputColor, entry.base_address());
+            print(cDefaultOutputColor, " - ");
+            print(cDefaultOutputColor, entry.length());
+            print_line(cDefaultOutputColor, " bytes");
+            }
           }
       },
       [](os::multiboot::tags::framebuffer_information const & tag) {
@@ -79,14 +84,11 @@ namespace
         switch(tag.type())
           {
           case os::multiboot::tags::framebuffer_information::framebuffer_type::ega_text:
-            print(cDefaultOutputColor, "    width: ");
+            print(cDefaultOutputColor, "    dimensions: ");
             print(cDefaultOutputColor, tag.width());
-            print_line(cDefaultOutputColor, " characters");
-            print(cDefaultOutputColor, "    height: ");
+            print(cDefaultOutputColor, "x");
             print(cDefaultOutputColor, tag.height());
             print_line(cDefaultOutputColor, " characters");
-            print(cDefaultOutputColor, "    bytes per line: ");
-            print_line(cDefaultOutputColor, tag.pitch());
             break;
           default:
             break;
@@ -104,7 +106,7 @@ namespace
             print(cDefaultOutputColor, entry.address());
             print(cDefaultOutputColor, " - ");
             print(cDefaultOutputColor, entry.size());
-            print_line(cDefaultOutputColor, " bytes - ");
+            print_line(cDefaultOutputColor, " bytes");
             }
           }
       },
