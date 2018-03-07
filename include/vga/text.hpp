@@ -62,9 +62,15 @@ namespace os::vga::text
 
   void print(color color, char const * const text);
 
-  void print(color color, os::core::byte_t const * const text);
+  void print(color color, void const * const pointer);
+
+  void print(color color, core::uint32_t value);
 
   void print_line(color color, char const * const text);
+
+  void print_line(color color, void const * const pointer);
+
+  void print_line(color color, core::uint32_t const value);
 
   void clear_screen();
 

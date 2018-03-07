@@ -139,6 +139,7 @@ _panic:
 _start:
   mov esp, stack_top
   mov ebp, esp
+  mov edi, ebx
 
   call check_loaded_by_multiboot
   call check_cpuid_is_supported
