@@ -190,7 +190,7 @@ initialize_page_table_structure:
 
   mov esi, _end_physical
   shr esi, 21
-  add esi, 1
+  add esi, 2
 
 .map_pt_pages:
   mov eax, cTwoMegaBytes
