@@ -1,44 +1,10 @@
 ; vim: ft=nasm et ts=2 sw=2
 
-; === Imported Functions ===
-extern kernel_main
+%include "/common_constants.asm"
 
-; === Imported Constants
+extern _transition
 extern _end_physical
 
-; === Exported Functions ===
-global _start:function
-
-; === Global Constants ===
-BLANK64 equ 0x0f200f200f200f20
-VGABASE equ 0xb8000
-VGACOLS equ 80
-VGAROWS equ 25
-NOFVGAQ equ 500
-TWOMEGS equ (1 << 21)
-PBITPRE equ (1 << 0)
-PBITWRI equ (1 << 1)
-PBITHUG equ (1 << 7)
-
-; === Boot Section - Multiboot 2 Magic Header
-section .bs_mbh progbits alloc noexec nowrite align=64
-
-header_start:
-.magic:
-    dd 0xe85250d6
-.architecture:
-    dd 0
-.length:
-    dd header_end - header_start
-.checksum:
-    dd 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start))
-.end:
-    dw 0
-    dw 0
-    dd 8
-header_end:
-
-; === Boot Secion - Uninitialized Data
 section .bs_bss nobits alloc noexec write align=4096
 
 plm4:
@@ -51,6 +17,9 @@ pdh:
   resq 512
 pdl:
   resq 512
+global multiboot_information_pointer:data
+multiboot_information_pointer:
+  resd 1
 
 section .bs_stack nobits alloc noexec write align=16
 
@@ -58,7 +27,6 @@ stack_bottom:
   resb 1 << 16
 stack_top:
 
-; === Boot Section - Read-only Data
 section .bs_rodata progbits alloc noexec nowrite
 
 gdt:
@@ -78,13 +46,11 @@ msg_cpuid:
 msg_longmode:
   db "LONG-MODE NOT SUPPORTED",0
 
-; === Boot Section - Read Write Data
 section .bs_data progbits alloc noexec write
 
 vga_buffer:
-  dd VGABASE
+  dd cVgaTextBufferAddress
  
-; === Boot Section - Program Code
 section .bs_text progbits alloc exec nowrite align=16
 bits 32
 
@@ -136,12 +102,15 @@ _panic:
 
   hlt
 
+global _start:function
 _start:
   mov esp, stack_top
   mov ebp, esp
-  mov edi, ebx
+  ; mov edi, ebx
 
   call check_loaded_by_multiboot
+  mov [multiboot_information_pointer], ebx
+
   call check_cpuid_is_supported
   call check_long_mode_is_supported
   call initialize_page_table_structure
@@ -149,7 +118,7 @@ _start:
 
   lgdt [gdt.ptr]
 
-  jmp gdt.code:_start_long
+  jmp gdt.code:_transition
 
   hlt
 
@@ -184,6 +153,7 @@ check_cpuid_is_supported:
   call _panic
 
 check_long_mode_is_supported:
+  push ebx
   mov eax, 0x80000000
   cpuid
   cmp eax, 0x80000001
@@ -193,6 +163,7 @@ check_long_mode_is_supported:
   cpuid
   test edx, 1 << 29
   jz .error
+  pop ebx
   ret
 .error:
   push msg_longmode
@@ -222,9 +193,9 @@ initialize_page_table_structure:
   add esi, 1
 
 .map_pt_pages:
-  mov eax, TWOMEGS
+  mov eax, cTwoMegaBytes
   mul ecx
-  or  eax, PBITPRE | PBITWRI | PBITHUG
+  or  eax, cPagePresentBit | cPageWritableBit | cPageHugePageBit
   mov [pdl + ecx * 8], eax
   mov [pdh + ecx * 8], eax
 
@@ -251,37 +222,4 @@ enable_paging:
   or eax, 1 << 31
   mov cr0, eax
 
-  ret
-
-; === Long Mode - Entry Code
-section .bs_text progbits alloc exec nowrite
-bits 64
-
-_start_long:
-.reload_segment_registers:
-  xor ax, ax
-  mov ss, ax
-  mov ds, ax
-  mov es, ax
-  mov fs, ax
-  mov gs, ax
-
-  call _clear_vga_buffer
-
-.enter_kernel:
-  call kernel_main
-  hlt
-
-_clear_vga_buffer:
-  push rbp
-  mov rbp, rsp
-  push rdi
-
-  mov rdi, VGABASE
-  mov rcx, NOFVGAQ
-  mov rax, BLANK64
-  rep stosq
-
-  pop rdi
-  pop rbp
   ret
