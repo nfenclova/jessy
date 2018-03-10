@@ -4,6 +4,14 @@
 namespace os::core
   {
 
+  namespace impl::type_traits
+    {
+    struct size_two
+      {
+      char filler[2]{};
+      };
+    }
+
   /**
    * Calculate the type resulting from removing the ref-qualifier from the given type
    */
@@ -17,6 +25,92 @@ namespace os::core
    * @note This is a convenience alias for os::core::remove_reference<Type>::type
    */
   template<typename Type> using remove_reference_t = typename remove_reference<Type>::type;
+
+  /**
+   * Wrap a constant value of integral type into a type
+   */
+  template<typename ValueType, ValueType Value>
+  struct integral_constant
+    {
+    using value_type = ValueType;
+    using type = integral_constant;
+
+    static ValueType constexpr value = Value;
+
+    constexpr operator value_type() const noexcept { return value; }
+    constexpr value_type operator()() const noexcept { return value; }
+    };
+
+  /**
+   * Convenience alias for a type representing false
+   */
+  using false_type = integral_constant<bool, false>;
+
+  /**
+   * Convenience alias for a type representing true
+   */
+  using true_type = integral_constant<bool, true>;
+
+  /**
+   * Check if two types are the same
+   */
+  template<typename LType, typename RType>
+  struct is_same : false_type { };
+
+  template<typename Type>
+  struct is_same<Type, Type> : true_type { };
+
+  template<typename LType, typename RType>
+  using is_same_t = is_same<LType, RType>;
+
+  template<typename LType, typename RType>
+  constexpr bool is_same_v = is_same_t<LType, RType>{};
+
+  namespace impl::type_traits
+    {
+    struct is_referenceable_test
+      {
+      template<typename Type>
+      static Type & test(int);
+
+      template<typename Type>
+      static size_two test(...);
+      };
+    }
+
+  /**
+   * Check if the given type can be used to bin references
+   */
+  template<typename Type>
+  struct is_referenceable :
+    integral_constant<
+      bool,
+      !is_same_v<
+        decltype(impl::type_traits::is_referenceable_test::test<Type>(0)),
+        impl::type_traits::size_two>
+      >
+    { };
+
+  template<typename Type>
+  using is_referenceable_t = typename is_referenceable<Type>::type;
+
+  template<typename Type>
+  constexpr bool is_referenceable_v = is_referenceable_t<Type>{};
+
+  namespace impl::type_traits
+    {
+    template<typename Type, bool = is_referenceable_v<Type>>
+    struct add_rvalue_reference_select
+      {
+      using type = Type;
+      };
+
+    template<typename Type>
+    struct add_rvalue_reference_select<Type, true>
+      {
+      using type = Type &&;
+      };
+    }
 
   }
 
