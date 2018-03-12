@@ -112,6 +112,12 @@ namespace os::core
       };
     }
 
+  template<typename Type>
+  struct add_rvalue_reference : impl::type_traits::add_rvalue_reference_select<Type> { };
+
+  template<typename Type>
+  using add_rvalue_reference_t = typename add_rvalue_reference<Type>::type;
+
   }
 
 #endif
