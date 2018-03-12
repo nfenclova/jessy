@@ -13,21 +13,12 @@ namespace os::core
     }
 
   /**
-   * Calculate the type resulting from removing the ref-qualifier from the given type
-   */
-  template<typename Type> struct remove_reference { using type = Type; };
-  template<typename Type> struct remove_reference<Type &> { using type = Type; };
-  template<typename Type> struct remove_reference<Type &&> { using type = Type; };
-
-  /**
-   * Calculate the type resulting from removing the ref-qualifier from the given type
-   *
-   * @note This is a convenience alias for os::core::remove_reference<Type>::type
-   */
-  template<typename Type> using remove_reference_t = typename remove_reference<Type>::type;
-
-  /**
    * Wrap a constant value of integral type into a type
+   *
+   * @note [meta.help]
+   *
+   * @tparam ValueType The type of value to wrap
+   * @tparam Value The value to wrap
    */
   template<typename ValueType, ValueType Value>
   struct integral_constant
@@ -53,18 +44,82 @@ namespace os::core
 
   /**
    * Check if two types are the same
+   *
+   * @note Base case for differing types
+   *
+   * @tparam LType The left-hand type
+   * @tparam RType The right-hand type
    */
   template<typename LType, typename RType>
   struct is_same : false_type { };
 
+  /**
+   * Check if two types are the same
+   *
+   * @note Special case for for identical types
+   */
   template<typename Type>
   struct is_same<Type, Type> : true_type { };
 
+  /**
+   * Convenience alias for accessing the @p type member of #os::core::is_same
+   *
+   * @tparam LType The left-hand type
+   * @tparam RType The right-hand type
+   */
   template<typename LType, typename RType>
-  using is_same_t = is_same<LType, RType>;
+  using is_same_t = typename is_same<LType, RType>::type;
 
+  /**
+   * Convenience alias for accessing the @p value member of #os::core::is_same
+   *
+   * @tparam LType The left-hand type
+   * @tparam RType The right-hand type
+   */
   template<typename LType, typename RType>
   constexpr bool is_same_v = is_same_t<LType, RType>{};
+
+  /**
+   * Static test suite for os::core::is_same
+   */
+  namespace impl::type_traits::test::is_same
+    {
+    static_assert(!os::core::is_same<int, char>::value);
+    static_assert(!os::core::is_same<int, char>{});
+    static_assert(!os::core::is_same<int, char>{}());
+    static_assert(!os::core::is_same_v<int, char>);
+
+    static_assert(os::core::is_same<int, int>::value);
+    static_assert(os::core::is_same<int, int>{});
+    static_assert(os::core::is_same<int, int>{}());
+    static_assert(os::core::is_same_v<int, int>);
+    }
+
+  /**
+   * Calculate the type resulting from removing the ref-qualifier from the given type
+   */
+  template<typename Type> struct remove_reference { using type = Type; };
+  template<typename Type> struct remove_reference<Type &> { using type = Type; };
+  template<typename Type> struct remove_reference<Type &&> { using type = Type; };
+
+  /**
+   * Calculate the type resulting from removing the ref-qualifier from the given type
+   *
+   * @note This is a convenience alias for os::core::remove_reference<Type>::type
+   */
+  template<typename Type> using remove_reference_t = typename remove_reference<Type>::type;
+
+  /**
+   * Static test suite for os::core::remove_reference
+   */
+  namespace impl::type_traits::test::remove_reference
+    {
+    static_assert(!os::core::is_same_v<int &, os::core::remove_reference<int &>::type>);
+    static_assert(!os::core::is_same_v<int &, os::core::remove_reference_t<int &>>);
+
+    static_assert(os::core::is_same_v<int, os::core::remove_reference<int &>::type>);
+    static_assert(os::core::is_same_v<int, os::core::remove_reference_t<int &>>);
+    }
 
   namespace impl::type_traits
     {
