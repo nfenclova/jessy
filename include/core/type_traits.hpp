@@ -173,6 +173,34 @@ namespace os::core
   template<typename Type>
   using add_rvalue_reference_t = typename add_rvalue_reference<Type>::type;
 
+  namespace impl::type_traits::test::add_rvalue_reference
+    {
+    static_assert(is_same_v<int &&, add_rvalue_reference_t<int>>);
+    static_assert(is_same_v<int &&, add_rvalue_reference_t<int &&>>);
+    static_assert(is_same_v<int &,  add_rvalue_reference_t<int &>>);
+    }
+
+  namespace impl::type_traits
+    {
+    template<typename Type, bool = is_referenceable_v<Type>>
+    struct add_lvalue_reference_select
+      {
+      using type = Type;
+      };
+
+    template<typename Type>
+    struct add_lvalue_reference_select<Type, true>
+      {
+      using type = Type &;
+      };
+    }
+
+  template<typename Type>
+  struct add_lvalue_reference : impl::type_traits::add_lvalue_reference_select<Type> { };
+
+  template<typename Type>
+  using add_lvalue_reference_t = typename add_lvalue_reference<Type>::type;
+
   }
 
 #endif
