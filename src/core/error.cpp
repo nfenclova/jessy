@@ -18,13 +18,13 @@ namespace os::core
     }
 
   [[noreturn]]
-  void panic(panic_location const location, char const * const message)
+  void panic(source_location const location, char const * const message)
     {
     vga::text::print(cPanicOutputColor, "[PANIC] ");
-    vga::text::print(cPanicOutputColor, location.function);
+    vga::text::print(cPanicOutputColor, location.function_name());
     vga::text::print(cPanicOutputColor, ":");
-    vga::text::print(cPanicOutputColor, location.file);
-    vga::text::print(cPanicOutputColor, ": ");
+    vga::text::print_line(cPanicOutputColor, location.file_name());
+    vga::text::print(cPanicOutputColor, "[PANIC] Error: ");
     vga::text::print(cPanicOutputColor, message);
 
     __asm__ volatile ( "hlt" );
