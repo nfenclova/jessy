@@ -15,7 +15,7 @@ namespace os::multiboot::tags
   struct tag_header
     {
     tags::type const type{};
-    core::uint32_t const size{};
+    iso::uint32_t const size{};
     };
 
 #define MULTIBOOT_TAG_CLASS_BEGIN(TagType) \

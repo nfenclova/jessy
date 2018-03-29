@@ -1,9 +1,9 @@
-#ifndef JESSY_CORE_SOURCE_LOCATION_HPP
-#define JESSY_CORE_SOURCE_LOCATION_HPP
+#ifndef JESSY_ISO_SOURCE_LOCATION_HPP
+#define JESSY_ISO_SOURCE_LOCATION_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstdint.hpp"
 
-namespace os::core
+namespace os::iso
   {
 
   struct source_location

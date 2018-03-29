@@ -1,14 +1,14 @@
 #ifndef JESSY_UNITS_BYTES_HPP
 #define JESSY_UNITS_BYTES_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstdint.hpp"
 #include "core/strong_type.hpp"
 
 namespace os::units
   {
 
   struct bytes_strong_tag{};
-  using bytes = core::strong_type<core::uint64_t, bytes_strong_tag>;
+  using bytes = core::strong_type<iso::uint64_t, bytes_strong_tag>;
 
   constexpr bytes operator""_byte(unsigned long long const size) noexcept
     {

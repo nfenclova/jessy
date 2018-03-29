@@ -1,9 +1,8 @@
-#include "core/error.hpp"
-#include "core/int_types.hpp"
-#include "vga/text.hpp"
 #include "bootstrap/addresses.hpp"
-
+#include "core/error.hpp"
+#include "iso/cstdint.hpp"
 #include "multiboot/information.hpp"
+#include "vga/text.hpp"
 
 extern "C" void _init();
 
@@ -126,5 +125,5 @@ extern "C" void kernel_main(os::multiboot::information const * multiboot_informa
 
   _init();
 
-  os::core::panic(os::core::source_location::current(), "Control-flow returned from kernel!");
+  os::core::panic(os::iso::source_location::current(), "Control-flow returned from kernel!");
   }

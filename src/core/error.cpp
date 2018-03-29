@@ -18,7 +18,7 @@ namespace os::core
     }
 
   [[noreturn]]
-  void panic(source_location const location, char const * const message)
+  void panic(iso::source_location const location, char const * const message)
     {
     vga::text::print(cPanicOutputColor, "[PANIC] ");
     vga::text::print(cPanicOutputColor, location.function_name());

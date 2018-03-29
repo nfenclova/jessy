@@ -1,9 +1,9 @@
-#ifndef JESSY_CORE_UTILITY_HPP
-#define JESSY_CORE_UTILITY_HPP
+#ifndef JESSY_ISO_UTILITY_HPP
+#define JESSY_ISO_UTILITY_HPP
 
-#include "core/type_traits.hpp"
+#include "iso/type_traits.hpp"
 
-namespace os::core
+namespace os::iso
   {
 
   template<typename Type>

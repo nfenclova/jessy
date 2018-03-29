@@ -1,7 +1,7 @@
-#ifndef JESSY_CORE_TYPE_TRAITS_HPP
-#define JESSY_CORE_TYPE_TRAITS_HPP
+#ifndef JESSY_ISO_TYPE_TRAITS_HPP
+#define JESSY_ISO_TYPE_TRAITS_HPP
 
-namespace os::core
+namespace os::iso
   {
 
   namespace impl::type_traits

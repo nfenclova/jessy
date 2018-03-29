@@ -1,10 +1,11 @@
 #include "vga/text.hpp"
-#include "core/memory.hpp"
+#include "iso/cstring.hpp"
+#include "iso/cstdint.hpp"
 
 namespace os::vga::text
   {
 
-  using vga_text_buffer_cell = os::core::uint16_t;
+  using vga_text_buffer_cell = iso::uint16_t;
 
   /**
    * @brief The global text buffer state
@@ -14,7 +15,7 @@ namespace os::vga::text
     /**
      * The current offset into to VGA text buffer (e.g the next "free" cell)
      */
-    os::core::ptrdiff_t gCurrentCell{};
+    iso::ptrdiff_t gCurrentCell{};
     }
 
   /**
@@ -66,7 +67,7 @@ namespace os::vga::text
     /**
      * Get a reference to a speficic cell in the VGA text buffer
      */
-    decltype(auto) cell(os::core::uint16_t column, os::core::uint16_t row)
+    decltype(auto) cell(iso::uint16_t column, iso::uint16_t row)
       {
       return *(cVGATextBufferBase + column + row * cVGATextBufferColumns);
       }
@@ -76,9 +77,9 @@ namespace os::vga::text
      */
     auto scroll_up()
       {
-      os::core::copy_memory(&cell(0, 0), &cell(0, 1), (cVGATextBufferRows - 1) * cVGATextBufferColumns);
+      iso::copy_memory(&cell(0, 0), &cell(0, 1), (cVGATextBufferRows - 1) * cVGATextBufferColumns);
       gCurrentCell -= gCurrentCell % cVGATextBufferColumns;
-      os::core::set_memory(&cell(), cVGAClearWord, cVGATextBufferColumns);
+      iso::set_memory(&cell(), cVGAClearWord, cVGATextBufferColumns);
       }
 
     /**
@@ -118,7 +119,7 @@ namespace os::vga::text
     {
     for(auto idx = 0ull; text[idx]; ++idx)
       {
-      cell() = static_cast<os::core::uint16_t>(color) + text[idx];
+      cell() = static_cast<iso::uint16_t>(color) + text[idx];
       move_to_next_cell();
       }
     }
@@ -128,13 +129,13 @@ namespace os::vga::text
     print(color, "0x");
     for(auto nibble = 1; nibble <= 16; ++nibble)
       {
-      auto const address = reinterpret_cast<os::core::uintptr_t>(pointer);
+      auto const address = reinterpret_cast<iso::uintptr_t>(pointer);
       auto const value = (address >> ((16 - nibble) * 4)) & 0xf;
       print(color, cHexDigitStrings[value]);
       }
     }
 
-  void print(color color, core::uint32_t const value)
+  void print(color color, iso::uint32_t const value)
     {
     if(value)
       {
@@ -155,7 +156,7 @@ namespace os::vga::text
     move_to_next_line();
     }
 
-  void print_line(color color, core::uint32_t const value)
+  void print_line(color color, iso::uint32_t const value)
     {
     print(color, value);
     move_to_next_line();
@@ -163,7 +164,7 @@ namespace os::vga::text
 
   void clear_screen()
     {
-    os::core::set_memory(&cell(0, 0), cVGAClearWord, cVGATextBufferColumns * cVGATextBufferRows);
+    iso::set_memory(&cell(0, 0), cVGAClearWord, cVGATextBufferColumns * cVGATextBufferRows);
     gCurrentCell = 0;
     }
 

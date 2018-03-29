@@ -1,15 +1,15 @@
 #ifndef JESSY_BOOTSTRAP_ADDRESSES_HPP
 #define JESSY_BOOTSTRAP_ADDRESSES_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstddef.hpp"
 
 namespace os::bootstrap
   {
 
-  extern "C" os::core::byte_t const _start_physical;
-  extern "C" os::core::byte_t const _end_physical;
-  extern "C" os::core::byte_t const _start_virtual;
-  extern "C" os::core::byte_t const _end_virtual;
+  extern "C" iso::byte_t const _start_physical;
+  extern "C" iso::byte_t const _end_physical;
+  extern "C" iso::byte_t const _start_virtual;
+  extern "C" iso::byte_t const _end_virtual;
 
   /**
    * The physical address the kernel has been loaded at

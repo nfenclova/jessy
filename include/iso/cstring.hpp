@@ -1,19 +1,19 @@
-#ifndef JESSY_CORE_MEMORY_HPP
-#define JESSY_CORE_MEMORY_HPP
+#ifndef JESSY_ISO_CSTRING_HPP
+#define JESSY_ISO_CSTRING_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstdint.hpp"
 
-extern "C" void _set_memory_byte(os::core::uint8_t volatile *, os::core::uint8_t const, size_t);
-extern "C" void _set_memory_word(os::core::uint16_t volatile *, os::core::uint16_t const, size_t);
-extern "C" void _set_memory_double_word(os::core::uint32_t volatile *, os::core::uint32_t const, size_t const);
-extern "C" void _set_memory_quad_word(os::core::uint64_t volatile *, os::core::uint64_t const, size_t const);
+extern "C" void _set_memory_byte(uint8_t volatile *, uint8_t const, size_t);
+extern "C" void _set_memory_word(uint16_t volatile *, uint16_t const, size_t);
+extern "C" void _set_memory_double_word(uint32_t volatile *, uint32_t const, size_t const);
+extern "C" void _set_memory_quad_word(uint64_t volatile *, uint64_t const, size_t const);
 
-extern "C" void _copy_memory_byte(os::core::uint8_t volatile *, os::core::uint8_t volatile const *, size_t);
-extern "C" void _copy_memory_word(os::core::uint16_t volatile *, os::core::uint16_t volatile const *, size_t);
-extern "C" void _copy_memory_double_word(os::core::uint32_t volatile *, os::core::uint32_t volatile const *, size_t const count);
-extern "C" void _copy_memory_quad_word(os::core::uint64_t volatile *, os::core::uint64_t volatile const *, size_t const count);
+extern "C" void _copy_memory_byte(uint8_t volatile *, uint8_t volatile const *, size_t);
+extern "C" void _copy_memory_word(uint16_t volatile *, uint16_t volatile const *, size_t);
+extern "C" void _copy_memory_double_word(uint32_t volatile *, uint32_t volatile const *, size_t const count);
+extern "C" void _copy_memory_quad_word(uint64_t volatile *, uint64_t volatile const *, size_t const count);
 
-namespace os::core
+namespace os::iso
   {
   /**
    * @brief Initialize the memory pointed to by @p destination with @p count copies of @p value

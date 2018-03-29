@@ -8,14 +8,14 @@ namespace os::multiboot::tags
   {
 
   MULTIBOOT_TAG_CLASS_BEGIN(boot_device)
-    core::uint32_t const m_biosDevice{};
-    core::uint32_t const m_partition{};
-    core::uint32_t const m_subPartition{};
+    iso::uint32_t const m_biosDevice{};
+    iso::uint32_t const m_partition{};
+    iso::uint32_t const m_subPartition{};
 
     public:
-      core::uint32_t const & bios_device() const noexcept { return m_biosDevice; }
-      core::uint32_t const & partition() const noexcept { return m_partition; }
-      core::uint32_t const & sub_partition() const noexcept { return m_subPartition; }
+      iso::uint32_t const & bios_device() const noexcept { return m_biosDevice; }
+      iso::uint32_t const & partition() const noexcept { return m_partition; }
+      iso::uint32_t const & sub_partition() const noexcept { return m_subPartition; }
   MULTIBOOT_TAG_CLASS_END
 
   }

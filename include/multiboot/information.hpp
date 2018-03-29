@@ -1,7 +1,7 @@
 #ifndef JESSY_MULTIBOOT_INFORMATION_HPP
 #define JESSY_MULTIBOOT_INFORMATION_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstdint.hpp"
 #include "multiboot/tags.hpp"
 
 namespace os::multiboot
@@ -48,8 +48,8 @@ namespace os::multiboot
       }
 
     private:
-      core::uint32_t total_size;
-      core::uint32_t reserved;
+      iso::uint32_t total_size;
+      iso::uint32_t reserved;
     };
 
   }
