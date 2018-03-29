@@ -3,3 +3,5 @@
 -Wextra
 -pedantic
 -Wno-gnu-include-next
+-DUNREACHABLE=__builtin_unreachable
+-DUNDERLYING_TYPE=__underlying_type

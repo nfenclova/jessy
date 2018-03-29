@@ -238,6 +238,23 @@ namespace os::iso
     static_assert(is_same_v<int &, add_lvalue_reference_t<int &>>);
     }
 
+  /**
+   * Calculate the underlying type of an enumeration type
+   */
+  template<typename Type>
+  struct underlying_type
+    {
+    using type = UNDERLYING_TYPE(Type);
+    };
+
+  /**
+   * Calculate the underlying type of an enumeration type
+   *
+   * @note This is a convenience alias for os::iso::underlying_type<Type>::type
+   */
+  template<typename Type>
+  using underlying_type_t = typename underlying_type<Type>::type;
+
   }
 
 #endif
