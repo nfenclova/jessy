@@ -134,7 +134,7 @@ namespace os::iso
     }
 
   /**
-   * Check if the given type can be used to bin references
+   * Check if the given type can be used to bind references
    */
   template<typename Type>
   struct is_referenceable :
@@ -146,11 +146,13 @@ namespace os::iso
       >
     { };
 
+  /**
+   * Check if the given type can be used to bind references
+   *
+   * @note This is a convenience alias for os::iso::is_referenceable<Type>::value
+   */
   template<typename Type>
-  using is_referenceable_t = typename is_referenceable<Type>::type;
-
-  template<typename Type>
-  constexpr bool is_referenceable_v = is_referenceable_t<Type>{};
+  constexpr bool is_referenceable_v = is_referenceable<Type>{};
 
   namespace impl::type_traits
     {
@@ -167,12 +169,26 @@ namespace os::iso
       };
     }
 
+  /**
+   * @brief Calculate the type arising from adding @p && to the given type
+   *
+   * This trait provides a member type @p type that is equal to <code>Type &&</code> iff.
+   * @p os::iso::is_referenceable_v is equal to @p true. Otherwise, @p type will be equal to @p Type
+   */
   template<typename Type>
   struct add_rvalue_reference : impl::type_traits::add_rvalue_reference_select<Type> { };
 
+  /**
+   * Calculate the type arising from adding @p && to the given type
+   *
+   * @note This is a convenience alias for os::iso::add_rvalue_reference<Type>::type
+   */
   template<typename Type>
   using add_rvalue_reference_t = typename add_rvalue_reference<Type>::type;
 
+  /**
+   * Static test suite for os::iso::add_rvalue_reference
+   */
   namespace impl::type_traits::test::add_rvalue_reference
     {
     static_assert(is_same_v<int &&, add_rvalue_reference_t<int>>);
@@ -195,11 +211,32 @@ namespace os::iso
       };
     }
 
+  /**
+   * @brief Calculate the type arising from adding @p & to the given type
+   *
+   * This trait provides a member type @p type that is equal to <code>Type &</code> iff.
+   * @p os::iso::is_referenceable_v is equal to @p true. Otherwise, @p type will be equal to @p Type
+   */
   template<typename Type>
   struct add_lvalue_reference : impl::type_traits::add_lvalue_reference_select<Type> { };
 
+  /**
+   * Calculate the type arising from adding @p & to the given type
+   *
+   * @note This is a convenience alias for os::iso::add_lvalue_reference<Type>::type
+   */
   template<typename Type>
   using add_lvalue_reference_t = typename add_lvalue_reference<Type>::type;
+
+  /**
+   * Static test suite for os::iso::add_lvalue_reference
+   */
+  namespace impl::type_traits::test::add_lvalue_reference
+    {
+    static_assert(is_same_v<int &, add_lvalue_reference_t<int>>);
+    static_assert(is_same_v<int &, add_lvalue_reference_t<int &&>>);
+    static_assert(is_same_v<int &, add_lvalue_reference_t<int &>>);
+    }
 
   }
 
