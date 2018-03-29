@@ -1,7 +1,7 @@
 #ifndef JESSY_STRONG_TYPE_HPP
 #define JESSY_STRONG_TYPE_HPP
 
-#include "core/utility.hpp"
+#include "iso/utility.hpp"
 
 namespace os::core
   {
@@ -10,7 +10,7 @@ namespace os::core
   struct strong_type
     {
     explicit constexpr strong_type(UnderlyingType const & value) : m_value{value} { };
-    explicit constexpr strong_type(UnderlyingType && value) : m_value{core::move(value)} { };
+    explicit constexpr strong_type(UnderlyingType && value) : m_value{iso::move(value)} { };
 
     explicit constexpr operator UnderlyingType() const
       {

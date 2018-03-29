@@ -62,7 +62,7 @@ namespace os::iso
   struct is_same<Type, Type> : true_type { };
 
   /**
-   * Convenience alias for accessing the @p type member of #os::core::is_same
+   * Convenience alias for accessing the @p type member of #os::iso::is_same
    *
    * @tparam LType The left-hand type
    * @tparam RType The right-hand type
@@ -71,7 +71,7 @@ namespace os::iso
   using is_same_t = typename is_same<LType, RType>::type;
 
   /**
-   * Convenience alias for accessing the @p value member of #os::core::is_same
+   * Convenience alias for accessing the @p value member of #os::iso::is_same
    *
    * @tparam LType The left-hand type
    * @tparam RType The right-hand type
@@ -80,19 +80,19 @@ namespace os::iso
   constexpr bool is_same_v = is_same_t<LType, RType>{};
 
   /**
-   * Static test suite for os::core::is_same
+   * Static test suite for os::iso::is_same
    */
   namespace impl::type_traits::test::is_same
     {
-    static_assert(!os::core::is_same<int, char>::value);
-    static_assert(!os::core::is_same<int, char>{});
-    static_assert(!os::core::is_same<int, char>{}());
-    static_assert(!os::core::is_same_v<int, char>);
+    static_assert(!os::iso::is_same<int, char>::value);
+    static_assert(!os::iso::is_same<int, char>{});
+    static_assert(!os::iso::is_same<int, char>{}());
+    static_assert(!os::iso::is_same_v<int, char>);
 
-    static_assert(os::core::is_same<int, int>::value);
-    static_assert(os::core::is_same<int, int>{});
-    static_assert(os::core::is_same<int, int>{}());
-    static_assert(os::core::is_same_v<int, int>);
+    static_assert(os::iso::is_same<int, int>::value);
+    static_assert(os::iso::is_same<int, int>{});
+    static_assert(os::iso::is_same<int, int>{}());
+    static_assert(os::iso::is_same_v<int, int>);
     }
 
   /**
@@ -105,20 +105,20 @@ namespace os::iso
   /**
    * Calculate the type resulting from removing the ref-qualifier from the given type
    *
-   * @note This is a convenience alias for os::core::remove_reference<Type>::type
+   * @note This is a convenience alias for os::iso::remove_reference<Type>::type
    */
   template<typename Type> using remove_reference_t = typename remove_reference<Type>::type;
 
   /**
-   * Static test suite for os::core::remove_reference
+   * Static test suite for os::iso::remove_reference
    */
   namespace impl::type_traits::test::remove_reference
     {
-    static_assert(!os::core::is_same_v<int &, os::core::remove_reference<int &>::type>);
-    static_assert(!os::core::is_same_v<int &, os::core::remove_reference_t<int &>>);
+    static_assert(!os::iso::is_same_v<int &, os::iso::remove_reference<int &>::type>);
+    static_assert(!os::iso::is_same_v<int &, os::iso::remove_reference_t<int &>>);
 
-    static_assert(os::core::is_same_v<int, os::core::remove_reference<int &>::type>);
-    static_assert(os::core::is_same_v<int, os::core::remove_reference_t<int &>>);
+    static_assert(os::iso::is_same_v<int, os::iso::remove_reference<int &>::type>);
+    static_assert(os::iso::is_same_v<int, os::iso::remove_reference_t<int &>>);
     }
 
   namespace impl::type_traits
