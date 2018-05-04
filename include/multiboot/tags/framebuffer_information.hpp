@@ -3,6 +3,7 @@
 
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
@@ -77,6 +78,8 @@ namespace os::multiboot::tags
       CASE(ega_text)
       }
 #undef CASE
+
+    core::panic(iso::source_location::current(), "Unhandled Multiboot 2 framebuffer type");
     }
 
   }

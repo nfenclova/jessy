@@ -3,6 +3,7 @@
 
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
@@ -115,6 +116,8 @@ namespace os::multiboot::tags
       CASE(number_of_defined_types)
       }
 #undef CASE
+
+    core::panic(iso::source_location::current(), "Unhandled Multiboot 2 ELF section type");
     }
 
   constexpr bool operator&(elf_symbols::section_flags const & lhs, elf_symbols::section_flags const & rhs)

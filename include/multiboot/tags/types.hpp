@@ -2,6 +2,7 @@
 #define JESSY_MULTIBOOT_TAGS_TYPES_HPP
 
 #include "iso/cstdint.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
@@ -63,6 +64,8 @@ namespace os::multiboot::tags
       CASE(unknown)
       }
 #undef CASE
+
+    core::panic(iso::source_location::current(), "Unhandled Multiboot 2 tag type");
     }
 
   }
