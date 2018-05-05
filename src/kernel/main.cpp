@@ -125,5 +125,5 @@ extern "C" void kernel_main(os::multiboot::information const * multiboot_informa
 
   _init();
 
-  os::core::panic(os::iso::source_location::current(), "Control-flow returned from kernel!");
+  os::core::panic("Control-flow returned from kernel!");
   }

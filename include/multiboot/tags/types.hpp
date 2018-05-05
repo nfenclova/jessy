@@ -65,7 +65,7 @@ namespace os::multiboot::tags
       }
 #undef CASE
 
-    core::panic(iso::source_location::current(), "Unhandled Multiboot 2 tag type");
+    core::panic("Unhandled Multiboot 2 tag type");
     }
 
   }

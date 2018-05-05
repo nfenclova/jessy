@@ -54,7 +54,7 @@ namespace os::iso
       {
       if(!m_hasValue)
         {
-        core::panic({__FUNCTION__, __FILE__}, "Illegal access to core::optional");
+        core::panic("Illegal access to empty core::optional");
         }
 
       return m_data.value;
@@ -64,7 +64,7 @@ namespace os::iso
       {
       if(!m_hasValue)
         {
-        core::panic({__FUNCTION__, __FILE__}, "Illegal access to core::optional");
+        core::panic("Illegal access to empty core::optional");
         }
 
       return m_data.value;
@@ -74,7 +74,7 @@ namespace os::iso
       {
       if(!m_hasValue)
         {
-        core::panic({__FUNCTION__, __FILE__}, "Illegal access to core::optional");
+        core::panic("Illegal access to empty core::optional");
         }
 
       return core::move(m_data.value);
@@ -84,7 +84,7 @@ namespace os::iso
       {
       if(!m_hasValue)
         {
-        core::panic({__FUNCTION__, __FILE__}, "Illegal access to core::optional");
+        core::panic("Illegal access to empty core::optional");
         }
 
       return core::move(m_data.value);

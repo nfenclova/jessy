@@ -117,7 +117,7 @@ namespace os::multiboot::tags
       }
 #undef CASE
 
-    core::panic(iso::source_location::current(), "Unhandled Multiboot 2 ELF section type");
+    core::panic("Unhandled Multiboot 2 ELF section type");
     }
 
   constexpr bool operator&(elf_symbols::section_flags const & lhs, elf_symbols::section_flags const & rhs)

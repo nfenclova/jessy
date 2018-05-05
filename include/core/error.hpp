@@ -6,7 +6,7 @@
 namespace os::core
   {
 
-  [[noreturn]] void panic(iso::source_location const location, char const * const message);
+  [[noreturn]] void panic(char const * const message, iso::source_location const location = iso::source_location::current());
 
   }
 
