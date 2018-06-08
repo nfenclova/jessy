@@ -25,5 +25,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STR
 endif()
 
 include_directories("include")
+
 add_subdirectory("src")
 add_subdirectory("support")
