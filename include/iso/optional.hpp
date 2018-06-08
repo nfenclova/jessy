@@ -34,7 +34,7 @@ namespace os::iso
       {
       if(m_hasValue)
         {
-        m_data.value = core::move(other.m_data.value);
+        m_data.value = iso::move(other.m_data.value);
         }
       }
 
@@ -47,7 +47,7 @@ namespace os::iso
     optional(ValueType && value)
       : m_hasValue{true}
       {
-      m_data.value = core::move(value);
+      m_data.value = iso::move(value);
       }
 
     constexpr ValueType & value() &
@@ -77,7 +77,7 @@ namespace os::iso
         core::panic("Illegal access to empty core::optional");
         }
 
-      return core::move(m_data.value);
+      return iso::move(m_data.value);
       }
 
     constexpr ValueType const && value() const &&
@@ -87,7 +87,7 @@ namespace os::iso
         core::panic("Illegal access to empty core::optional");
         }
 
-      return core::move(m_data.value);
+      return iso::move(m_data.value);
       }
 
     constexpr operator bool() const
@@ -96,7 +96,7 @@ namespace os::iso
       }
 
     template<typename Callable>
-    constexpr  map(Callable function)
+    constexpr auto map(Callable function)
       {
       if(m_hasValue)
         {
