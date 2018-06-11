@@ -7,3 +7,4 @@ build
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/**/usage.statistics.xml
+.idea/**/misc.xml
