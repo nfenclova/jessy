@@ -12,6 +12,9 @@ namespace os::iso
       };
     }
 
+  template<typename ...>
+  using void_t = void;
+
   /**
    * Wrap a constant value of integral type into a type
    *
@@ -239,7 +242,21 @@ namespace os::iso
     }
 
   /**
+   * A meta-function to declare a reference to and object of type @p Type
+   *
+   * This function allows the "instantiation" of an object without using constructors. It therefore can only be used in
+   * unevaluated contexts.
+   *
+   * @tparam Type The type of the object to "instantiate"
+   */
+  template<typename Type>
+  add_rvalue_reference_t<Type> declval();
+
+  /**
    * Calculate the underlying type of an enumeration type
+   *
+   * This trait provides a member type alias @p type that is equal to the underlying type of @p Type. The behaviour is
+   * undefined if @p Type is not an enumeration type.
    */
   template<typename Type>
   struct underlying_type
@@ -257,6 +274,8 @@ namespace os::iso
 
   /**
    * Select one type or the other, depending on the value of @p If
+   *
+   * This trait provides a member type alias @p type that is equal to @p Then if @p If is @p true, and @p Else otherwise
    *
    * @tparam If The codition under which the first type shall be selected
    * @tparam Then The type to be selected if @p If evaluates to true
@@ -297,8 +316,136 @@ namespace os::iso
     static_assert(is_same_v<void, conditional_t<true, void, int>>);
     static_assert(is_same_v<int, conditional_t<false, void, int>>);
 
-    static_assert(is_same_v<typename conditional<true, void, int>::type, conditional_t<true, void, int>>);
-    static_assert(is_same_v<typename conditional<false, void, int>::type, conditional_t<false, void, int>>);
+    static_assert(is_same_v<typename iso::conditional<true, void, int>::type, conditional_t<true, void, int>>);
+    static_assert(is_same_v<typename iso::conditional<false, void, int>::type, conditional_t<false, void, int>>);
+    }
+
+  /**
+   * Test if a given type is a union
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether
+   * @p Type is a @p union or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type>
+  struct is_union : integral_constant<bool, IS_UNION(Type)> { };
+
+  /**
+   * Test if a given type is a union
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for os::iso::is_union<Type>::value
+   */
+  template<typename Type>
+  bool constexpr is_union_v = is_union<Type>::value;
+
+  /**
+   * Static test suite for os::iso::is_union
+   */
+  namespace impl::type_traits::test::is_union
+    {
+    static_assert(!is_union_v<void>);
+    static_assert(is_union_v<union U>);
+
+    static_assert(is_union_v<void> == iso::is_union<void>{});
+    static_assert(is_union_v<union U> == iso::is_union<union V>{});
+    }
+
+  namespace impl::type_traits
+    {
+    template<typename Type>
+    char is_class_test(int Type::*);
+
+    template<typename Type>
+    size_two is_class_test(...);
+    }
+
+  /**
+   * Test if a given type is a class type
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether
+   * @p Type is a @p class-type or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type>
+  struct is_class : integral_constant<
+    bool,
+    sizeof(impl::type_traits::is_class_test<Type>(0)) == 1 &&
+    !is_union_v<Type>
+  > { };
+
+  /**
+   * Test if a given type is a class type
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for os::iso::is_class<Type>
+   */
+  template<typename Type>
+  bool constexpr is_class_v = is_class<Type>{};
+
+  namespace impl::type_traits
+    {
+    template<typename Base>
+    true_type is_base_of_test(Base *);
+
+    template<typename Base>
+    false_type is_base_of_test(void *);
+
+    template<typename Base, typename Derived>
+    using is_base_of_test_type = decltype(is_base_of_test<Base>(declval<Derived *>()));
+
+    template<typename Base, typename Derived, typename = void>
+    struct is_base_of_test_type2 : true_type { };
+
+    template<typename Base, typename Derived>
+    struct is_base_of_test_type2<Base, Derived, void_t<is_base_of_test_type<Base, Derived>>> :
+        is_base_of_test_type<Base, Derived> {};
+    }
+
+  /**
+   * Test if @p Base is a base class of @p Derived
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether
+   * @p Base is a base class of @p Derived or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Base The suspected base class
+   * @tparam Derived The type to test
+   */
+  template<typename Base, typename Derived>
+  struct is_base_of : conditional_t<
+    is_class_v<Base> && is_class_v<Derived>,
+    impl::type_traits::is_base_of_test_type2<Base, Derived>,
+    false_type
+  > { };
+
+  /**
+   * Test if @p Base is a base class of @p Derived
+   *
+   * @tparam Base The suspected base class
+   * @tparam Derived The type to test
+   * @note This is a convenience alias for os::iso::is_base_of<Base, Derived>
+   */
+  template<typename Base, typename Derived>
+  bool constexpr is_base_of_v = is_base_of<Base, Derived>{};
+
+  /**
+   * Static test suite for os::iso::is_base_of
+   */
+  namespace impl::type_traits::test::is_base_of
+    {
+    struct base { };
+    struct derived : base { };
+
+    static_assert(is_base_of_v<base, derived>);
+    static_assert(!is_base_of_v<derived, base>);
+    static_assert(!is_base_of_v<void, derived>);
+    static_assert(!is_base_of_v<base, void>);
+    static_assert(is_base_of_v<base, base>);
+
+    static_assert(is_base_of_v<base, derived> == iso::is_base_of<base, derived>{});
+    static_assert(is_base_of_v<derived, base> == iso::is_base_of<derived, base>{});
     }
   }
 

@@ -24,8 +24,6 @@ namespace os::iso
     return static_cast<Type &&>(value);
     }
 
-  template<typename Type>
-  add_rvalue_reference_t<Type> declval();
   }
 
 #endif
