@@ -9,7 +9,7 @@ namespace os::iso
 
   struct nullopt_t
     {
-    constexpr nullopt_t(int) { }
+    explicit constexpr nullopt_t(int) { }
     };
 
   constexpr nullopt_t nullopt{42};
@@ -18,7 +18,7 @@ namespace os::iso
   struct optional
     {
     constexpr optional() : m_data{}, m_hasValue{} { }
-    constexpr optional(nullopt_t) : optional{} { }
+    explicit constexpr optional(nullopt_t) : optional{} { }
 
     optional(optional const & other)
       : m_hasValue{other.m_hasValue}
@@ -29,7 +29,7 @@ namespace os::iso
         }
       }
 
-    optional(optional && other)
+    optional(optional && other) noexcept
       : m_hasValue{other.m_hasValue}
       {
       if(m_hasValue)
@@ -38,13 +38,13 @@ namespace os::iso
         }
       }
 
-    optional(ValueType const & value)
+    explicit optional(ValueType const & value) noexcept
       : m_hasValue{true}
       {
       m_data.value = value;
       }
 
-    optional(ValueType && value)
+    explicit optional(ValueType && value) noexcept
       : m_hasValue{true}
       {
       m_data.value = iso::move(value);
@@ -90,13 +90,13 @@ namespace os::iso
       return iso::move(m_data.value);
       }
 
-    constexpr operator bool() const
+    explicit constexpr operator bool() const
       {
       return m_hasValue;
       }
 
     template<typename Callable>
-    constexpr auto map(Callable function)
+    constexpr auto map(Callable function) const
       {
       if(m_hasValue)
         {
@@ -108,7 +108,7 @@ namespace os::iso
 
     private:
       union storage { char base; ValueType value; } m_data;
-      bool m_hasValue;
+      bool m_hasValue{};
     };
 
   }
