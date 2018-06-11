@@ -289,6 +289,17 @@ namespace os::iso
   template<bool If, typename Then, typename Else>
   using conditional_t = typename conditional<If, Then, Else>::type;
 
+  /**
+   * Static test suite for os::iso::conditional
+   */
+  namespace impl::type_traits::test::conditional
+    {
+    static_assert(is_same_v<void, conditional_t<true, void, int>>);
+    static_assert(is_same_v<int, conditional_t<false, void, int>>);
+
+    static_assert(is_same_v<typename conditional<true, void, int>::type, conditional_t<true, void, int>>);
+    static_assert(is_same_v<typename conditional<false, void, int>::type, conditional_t<false, void, int>>);
+    }
   }
 
 #endif
