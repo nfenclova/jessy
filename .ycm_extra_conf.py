@@ -20,6 +20,7 @@ def FlagsForFile(*args, **kwargs):
             '-fno-exceptions',
 
             '-DUNREACHABLE=__builtin_unreachable',
+            '-DUNDERLYING_TYPE=__underlying_type',
 
             '-Iinclude',
         ],
