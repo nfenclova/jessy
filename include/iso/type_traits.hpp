@@ -255,6 +255,40 @@ namespace os::iso
   template<typename Type>
   using underlying_type_t = typename underlying_type<Type>::type;
 
+  /**
+   * Select one type or the other, depending on the value of @p If
+   *
+   * @tparam If The codition under which the first type shall be selected
+   * @tparam Then The type to be selected if @p If evaluates to true
+   * @tparam Else The type to be selected if @p If evaluates to false
+   */
+  template<bool If, typename Then, typename Else>
+  struct conditional
+    {
+    using type = Then;
+    };
+
+  /**
+   * Specialisation of os::iso::conditional for the case that @p If evaluates to false
+   */
+  template<typename Then, typename Else>
+  struct conditional<false, Then, Else>
+    {
+    using type = Else;
+    };
+
+  /**
+   * Select one type or the other, depending on the value of @p If
+   *
+   * @tparam If The codition under which the first type shall be selected
+   * @tparam Then The type to be selected if @p If evaluates to true
+   * @tparam Else The type to be selected if @p If evaluates to false
+   *
+   * @note This is a convenience alias form os::iso::conditional<If, Then, Else>::type
+   */
+  template<bool If, typename Then, typename Else>
+  using conditional_t = typename conditional<If, Then, Else>::type;
+
   }
 
 #endif
