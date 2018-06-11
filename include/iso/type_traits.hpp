@@ -6,12 +6,22 @@ namespace os::iso
 
   namespace impl::type_traits
     {
+    /**
+     * A simple helper type to allow differentiation of return type sizes
+     */
     struct size_two
       {
       char filler[2]{};
       };
     }
 
+  /**
+   * A helper type alias to map arbitrary types to void
+   *
+   * This type alias is especially useful to detect malformed typed when employing SFINAE.
+   *
+   * @tparam ... An arbitrary number of types to map to void
+   */
   template<typename ...>
   using void_t = void;
 
