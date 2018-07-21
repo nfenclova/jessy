@@ -136,6 +136,101 @@ namespace os::iso
     static_assert(os::iso::is_same_v<int, os::iso::remove_reference_t<int &>>);
     }
 
+  /**
+   * Calculate the type resulting from removing the top-level const-qualification from the given type
+   *
+   * @tparam Type The type to remove const-qualification from
+   */
+  template<typename Type> struct remove_const { using type = Type; };
+  template<typename Type> struct remove_const<Type const> { using type = Type; };
+
+  /**
+   * Calculate the type resulting from removing the top-level const-qualification from the given type
+   *
+   * @tparam Type The type to remove const-qualification from
+   * @note This is a convenience alias for os::iso::remove_const<Type>::type
+   */
+  template<typename Type> using remove_const_t = typename remove_const<Type>::type;
+
+  /**
+   * Static test suite for os::iso::remove_const
+   */
+  namespace impl::type_traits::test::remove_const
+    {
+    static_assert(is_same_v<int, remove_const_t<int>>);
+    static_assert(is_same_v<int, remove_const_t<int const>>);
+    static_assert(is_same_v<int volatile, remove_const_t<int volatile>>);
+    static_assert(is_same_v<int volatile, remove_const_t<int const volatile>>);
+
+    static_assert(is_same_v<iso::remove_const<int>::type, remove_const_t<int>>);
+    static_assert(is_same_v<iso::remove_const<int const>::type, remove_const_t<int const>>);
+    static_assert(is_same_v<iso::remove_const<int volatile>::type, remove_const_t<int volatile>>);
+    static_assert(is_same_v<iso::remove_const<int const volatile>::type, remove_const_t<int const volatile>>);
+    }
+
+  /**
+   * Calculate the type resulting from removing the top-level volatile-qualification from the given type
+   *
+   * @tparam Type The type to remove volatile-qualification from
+   */
+  template<typename Type> struct remove_volatile { using type = Type; };
+  template<typename Type> struct remove_volatile<Type volatile> { using type = Type; };
+
+  /**
+   * Calculate the type resulting from removing the top-level volatile-qualification from the given type
+   *
+   * @tparam Type The type to remove volatile-qualification from
+   * @note This is a convenience alias for os::iso::remove_volatile<Type>::type
+   */
+  template<typename Type> using remove_volatile_t = typename remove_volatile<Type>::type;
+
+  /**
+   * Static test suite for os::iso::remove_volatile
+   */
+  namespace impl::type_traits::test::remove_volatile
+    {
+    static_assert(is_same_v<int, remove_volatile_t<int>>);
+    static_assert(is_same_v<int, remove_volatile_t<int volatile>>);
+    static_assert(is_same_v<int const, remove_volatile_t<int const>>);
+    static_assert(is_same_v<int const, remove_volatile_t<int const volatile>>);
+
+    static_assert(is_same_v<iso::remove_volatile<int>::type, remove_volatile_t<int>>);
+    static_assert(is_same_v<iso::remove_volatile<int volatile>::type, remove_volatile_t<int volatile>>);
+    static_assert(is_same_v<iso::remove_volatile<int const>::type, remove_volatile_t<int const>>);
+    static_assert(is_same_v<iso::remove_volatile<int const volatile>::type, remove_volatile_t<int const volatile>>);
+    }
+
+  /**
+   * Calculate the type resulting from removing the top-level cv-qualification from the given type
+   *
+   * @tparam Type The type to remove cv-qualification from
+   */
+  template<typename Type> struct remove_cv { using type = remove_volatile_t<remove_const_t<Type>>; };
+
+  /**
+   * Calculate the type resulting from removing the top-level cv-qualification from the given type
+   *
+   * @tparam Type The type to remove cv-qualification from
+   * @note This is a convenience alias for os::iso::remove_cv<Type>::type
+   */
+  template<typename Type> using remove_cv_t = typename remove_cv<Type>::type;
+
+  /**
+   * Static test suite for os::iso::remove_cv
+   */
+  namespace impl::type_traits::test::remove_cv
+    {
+    static_assert(is_same_v<int, remove_cv_t<int>>);
+    static_assert(is_same_v<int, remove_cv_t<int const>>);
+    static_assert(is_same_v<int, remove_cv_t<int volatile>>);
+    static_assert(is_same_v<int, remove_cv_t<int const volatile>>);
+
+    static_assert(is_same_v<iso::remove_cv<int>::type, remove_cv_t<int>>);
+    static_assert(is_same_v<iso::remove_cv<int volatile>::type, remove_cv_t<int volatile>>);
+    static_assert(is_same_v<iso::remove_cv<int const>::type, remove_cv_t<int const>>);
+    static_assert(is_same_v<iso::remove_cv<int const volatile>::type, remove_cv_t<int const volatile>>);
+    }
+
   namespace impl::type_traits
     {
     struct is_referenceable_test
