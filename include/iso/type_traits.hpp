@@ -603,6 +603,124 @@ namespace os::iso
     static_assert(is_array_v<int[]> == iso::is_array<int[]>{});
     static_assert(is_array_v<int[42]> == iso::is_array<int[42]>{});
     }
+
+  /**
+   * Test if @p Type names an lvalue reference type
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether @p Type names
+   * an lvalue reference type or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type> struct is_lvalue_reference : false_type { };
+  template<typename Type> struct is_lvalue_reference<Type &> : true_type { };
+
+  /**
+   * Test if @p Type names an lvalue reference type
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for iso::is_lvalue_reference<Type>
+   */
+  template<typename Type> bool constexpr is_lvalue_reference_v = is_lvalue_reference<Type>{};
+
+  /**
+   * Static test suite for os::iso::is_lvalue_reference
+   */
+  namespace impl::type_traits::test::is_lvalue_reference
+    {
+    static_assert(!is_lvalue_reference_v<int>);
+    static_assert(!is_lvalue_reference_v<int &&>);
+    static_assert(is_lvalue_reference_v<int &>);
+    static_assert(is_lvalue_reference_v<int const &>);
+    static_assert(is_lvalue_reference_v<int volatile &>);
+    static_assert(is_lvalue_reference_v<int const volatile &>);
+
+    static_assert(is_lvalue_reference_v<int> == iso::is_lvalue_reference<int>{});
+    static_assert(is_lvalue_reference_v<int &&> == iso::is_lvalue_reference<int &&>{});
+    static_assert(is_lvalue_reference_v<int &> == iso::is_lvalue_reference<int &>{});
+    static_assert(is_lvalue_reference_v<int const &> == iso::is_lvalue_reference<int const &>{});
+    static_assert(is_lvalue_reference_v<int volatile &> == iso::is_lvalue_reference<int volatile &>{});
+    static_assert(is_lvalue_reference_v<int const volatile &> == iso::is_lvalue_reference<int const volatile &>{});
+    }
+
+  /**
+   * Test if @p Type names an rvalue reference type
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether @p Type names
+   * an rvalue reference type or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type> struct is_rvalue_reference : false_type { };
+  template<typename Type> struct is_rvalue_reference<Type &&> : true_type { };
+
+  /**
+   * Test if @p Type names an rvalue reference type
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for iso::is_rvalue_reference<Type>
+   */
+  template<typename Type> bool constexpr is_rvalue_reference_v = is_rvalue_reference<Type>{};
+
+  /**
+   * Static test suite for os::iso::is_rvalue_reference
+   */
+  namespace impl::type_traits::test::is_rvalue_reference
+    {
+    static_assert(!is_rvalue_reference_v<int>);
+    static_assert(!is_rvalue_reference_v<int &>);
+    static_assert(is_rvalue_reference_v<int &&>);
+    static_assert(is_rvalue_reference_v<int const &&>);
+    static_assert(is_rvalue_reference_v<int volatile &&>);
+    static_assert(is_rvalue_reference_v<int const volatile &&>);
+
+    static_assert(is_rvalue_reference_v<int> == iso::is_rvalue_reference<int>{});
+    static_assert(is_rvalue_reference_v<int &> == iso::is_rvalue_reference<int &>{});
+    static_assert(is_rvalue_reference_v<int &&> == iso::is_rvalue_reference<int &&>{});
+    static_assert(is_rvalue_reference_v<int const &&> == iso::is_rvalue_reference<int const &&>{});
+    static_assert(is_rvalue_reference_v<int volatile &&> == iso::is_rvalue_reference<int volatile &&>{});
+    static_assert(is_rvalue_reference_v<int const volatile &&> == iso::is_rvalue_reference<int const volatile &&>{});
+    }
+
+  /**
+   * Test if @p Type names an reference type
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether @p Type names
+   * an reference type or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type>
+  struct is_reference : integral_constant<bool, is_lvalue_reference_v<Type> || is_rvalue_reference_v<Type>> { };
+
+  /**
+   * Test if @p Type names an rvalue reference type
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for iso::is_reference<Type>
+   */
+  template<typename Type> bool constexpr is_reference_v = is_reference<Type>{};
+
+  /**
+   * Static test suite for os::iso::is_reference
+   */
+  namespace impl::type_traits::test::is_reference
+    {
+    static_assert(!is_reference_v<int>);
+    static_assert(is_reference_v<int &>);
+    static_assert(is_reference_v<int &&>);
+    static_assert(is_reference_v<int const &&>);
+    static_assert(is_reference_v<int volatile &&>);
+    static_assert(is_reference_v<int const volatile &&>);
+
+    static_assert(is_reference_v<int> == iso::is_reference<int>{});
+    static_assert(is_reference_v<int &> == iso::is_reference<int &>{});
+    static_assert(is_reference_v<int &&> == iso::is_reference<int &&>{});
+    static_assert(is_reference_v<int const &&> == iso::is_reference<int const &&>{});
+    static_assert(is_reference_v<int volatile &&> == iso::is_reference<int volatile &&>{});
+    static_assert(is_reference_v<int const volatile &&> == iso::is_reference<int const volatile &&>{});
+    }
+
   }
 
 #endif
