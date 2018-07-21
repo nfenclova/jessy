@@ -1,6 +1,8 @@
 #ifndef JESSY_ISO_TYPE_TRAITS_HPP
 #define JESSY_ISO_TYPE_TRAITS_HPP
 
+#include "iso/cstddef.hpp"
+
 namespace os::iso
   {
 
@@ -465,6 +467,46 @@ namespace os::iso
 
     static_assert(is_base_of_v<base, derived> == iso::is_base_of<base, derived>{});
     static_assert(is_base_of_v<derived, base> == iso::is_base_of<derived, base>{});
+    }
+
+  /**
+   * Test if @p Type names an array type
+   *
+   * This trait provides a static member of type @p bool that is either @p true or @p false, depending on whether @p Type names
+   * an arrya type or not. Objects of this trait are implicitely convertible to @p bool.
+   *
+   * @tparam Type The type to test
+   */
+  template<typename Type>
+  struct is_array : false_type { };
+
+  template<typename Type>
+  struct is_array<Type[]> : true_type { };
+
+  template<typename Type, iso::size_t Dimension>
+  struct is_array<Type[Dimension]> : true_type { };
+
+  /**
+   * Test if @p Type names an array type
+   *
+   * @tparam Type The type to test
+   * @note This is a convenience alias for os::iso::is_array<Type>
+   */
+  template<typename Type>
+  bool constexpr is_array_v = is_array<Type>{};
+
+  /**
+   * Static test suite for os::iso::is_array
+   */
+  namespace impl::type_traits::test::is_array
+    {
+    static_assert(!is_array_v<int>);
+    static_assert(is_array_v<int[]>);
+    static_assert(is_array_v<int[42]>);
+
+    static_assert(is_array_v<int> == iso::is_array<int>{});
+    static_assert(is_array_v<int[]> == iso::is_array<int[]>{});
+    static_assert(is_array_v<int[42]> == iso::is_array<int[42]>{});
     }
   }
 
