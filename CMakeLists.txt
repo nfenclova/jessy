@@ -23,6 +23,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STR
   add_definitions("-DUNREACHABLE=__builtin_unreachable")
   add_definitions("-DUNDERLYING_TYPE=__underlying_type")
   add_definitions("-DIS_UNION=__is_union")
+  add_definitions("-DADDRESSOF=__builtin_addressof")
 endif()
 
 include_directories("include")

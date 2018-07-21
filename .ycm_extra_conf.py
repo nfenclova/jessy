@@ -21,6 +21,8 @@ def FlagsForFile(*args, **kwargs):
 
             '-DUNREACHABLE=__builtin_unreachable',
             '-DUNDERLYING_TYPE=__underlying_type',
+            '-DIS_UNION=__is_union',
+            '-DADDRESSOF=__builtin_addressof',
 
             '-Iinclude',
         ],

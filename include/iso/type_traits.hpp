@@ -263,6 +263,15 @@ namespace os::iso
   add_rvalue_reference_t<Type> declval();
 
   /**
+   * Take the address of any object, ignoring overloaded <code>operator &</code>
+   */
+  template<typename Type>
+  constexpr Type * addressof(Type & object) { return ADDRESSOF(object); }
+
+  template<typename Type>
+  Type * addressof(Type const &&) = delete;
+
+  /**
    * Calculate the underlying type of an enumeration type
    *
    * This trait provides a member type alias @p type that is equal to the underlying type of @p Type. The behaviour is
@@ -384,7 +393,7 @@ namespace os::iso
     bool,
     sizeof(impl::type_traits::is_class_test<Type>(0)) == 1 &&
     !is_union_v<Type>
-  > { };
+    > { };
 
   /**
    * Test if a given type is a class type
@@ -428,7 +437,7 @@ namespace os::iso
     is_class_v<Base> && is_class_v<Derived>,
     impl::type_traits::is_base_of_test_type2<Base, Derived>,
     false_type
-  > { };
+    > { };
 
   /**
    * Test if @p Base is a base class of @p Derived
