@@ -1,5 +1,7 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+include("AddSubsystem")
+
 add_subdirectory("bootstrap")
 add_subdirectory("core")
 add_subdirectory("kernel")
@@ -23,6 +25,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   gcc
+  headers
   )
 
 set_target_properties(${PROJECT_NAME}
