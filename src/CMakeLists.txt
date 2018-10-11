@@ -1,5 +1,7 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+set(GENERATED_FILES)
+
 include("AddSubsystem")
 
 add_subdirectory("bootstrap")
@@ -34,11 +36,18 @@ set_target_properties(${PROJECT_NAME}
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND "${CMAKE_OBJCOPY}"
-  ARGS --only-keep-debug "$<TARGET_FILE:${PROJECT_NAME}>" ${CMAKE_BINARY_DIR}/debug_info.sym
-  BYPRODUCTS ${CMAKE_BINARY_DIR}/debug_info.sym
+  ARGS --only-keep-debug "$<TARGET_FILE:${PROJECT_NAME}>" "${DEBUG_SYMBOL_FILE}"
+  BYPRODUCTS "${DEBUG_SYMBOL_FILE}"
+  )
+list(APPEND GENERATED_FILES
+  "${DEBUG_SYMBOL_FILE}"
   )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND "${CMAKE_STRIP}"
   ARGS --strip-debug "$<TARGET_FILE:${PROJECT_NAME}>"
+  )
+
+set_directory_properties(PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+  "${GENERATED_FILES}"
   )
