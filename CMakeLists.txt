@@ -1,5 +1,10 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+# Set the default toolchain
+if(NOT CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/Toolchains/GNUCrossToolchain.cmake")
+endif()
+
 # Basic Project Configuration
 cmake_minimum_required(VERSION 3.10.0)
 project(jessy
