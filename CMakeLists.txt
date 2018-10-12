@@ -24,6 +24,10 @@ include("CXXConfiguration")
 include("LinkerConfiguration")
 include("NasmConfiguration")
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+endif()
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   add_definitions("-DUNREACHABLE=__builtin_unreachable")
   add_definitions("-DUNDERLYING_TYPE=__underlying_type")
