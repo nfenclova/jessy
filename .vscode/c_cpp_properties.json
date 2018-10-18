@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include"
+            ],
+            "defines": [
+                "UNDERLYING_TYPE=__underlying_type",
+                "UNREACHABLE=__builtin_unreachable"
+
+            ],
+            "compilerPath": "/usr/bin/x86_64-elf-gcc --sysroot=/usr/lib/gcc/x86_64-elf/8.1.0 -ffreestanding -nostdlib -Wextra -Werror -pedantic-errors",
+            "cStandard": "${default}",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "configurationProvider": "gcc-x64",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}

@@ -1,12 +1,13 @@
 #ifndef JESSY_VGA_TEXT_HPP
 #define JESSY_VGA_TEXT_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstddef.hpp"
+#include "iso/cstdint.hpp"
 
 namespace os::vga::text
   {
 
-  enum struct foreground_color : os::core::byte_t
+  enum struct foreground_color : iso::byte_t
     {
     black,
     blue,
@@ -18,13 +19,13 @@ namespace os::vga::text
     gray,
     };
 
-  enum struct foreground_modifier : os::core::byte_t
+  enum struct foreground_modifier : iso::byte_t
     {
     none,
     bright = 0b00001000,
     };
 
-  enum struct background_color : os::core::byte_t
+  enum struct background_color : iso::byte_t
     {
     black = static_cast<unsigned char>(foreground_color::black) << 4,
     blue = static_cast<unsigned char>(foreground_color::blue) << 4,
@@ -36,7 +37,7 @@ namespace os::vga::text
     gray = static_cast<unsigned char>(foreground_color::gray) << 4,
     };
 
-  enum struct background_modifier : os::core::byte_t
+  enum struct background_modifier : iso::byte_t
     {
     none,
     blink = 0b10000000,
@@ -44,7 +45,7 @@ namespace os::vga::text
 
   struct color
     {
-    explicit constexpr operator os::core::uint16_t() const
+    explicit constexpr operator iso::uint16_t() const
       {
       return (
         static_cast<uint16_t>(foreground_color)        |
@@ -64,13 +65,13 @@ namespace os::vga::text
 
   void print(color color, void const * const pointer);
 
-  void print(color color, core::uint32_t value);
+  void print(color color, iso::uint32_t value);
 
   void print_line(color color, char const * const text);
 
   void print_line(color color, void const * const pointer);
 
-  void print_line(color color, core::uint32_t const value);
+  void print_line(color color, iso::uint32_t const value);
 
   void clear_screen();
 

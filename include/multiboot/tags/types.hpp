@@ -1,12 +1,13 @@
 #ifndef JESSY_MULTIBOOT_TAGS_TYPES_HPP
 #define JESSY_MULTIBOOT_TAGS_TYPES_HPP
 
-#include "core/int_types.hpp"
+#include "iso/cstdint.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
 
-  enum struct type : os::core::uint32_t
+  enum struct type : iso::uint32_t
     {
     end,
     boot_command_line,
@@ -63,6 +64,8 @@ namespace os::multiboot::tags
       CASE(unknown)
       }
 #undef CASE
+
+    core::panic("Unhandled Multiboot 2 tag type");
     }
 
   }

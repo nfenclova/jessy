@@ -3,18 +3,19 @@
 
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
 
   MULTIBOOT_TAG_CLASS_BEGIN(elf_symbols)
-    core::uint32_t const m_count{};
-    core::uint32_t const m_entrySize{};
-    core::uint32_t const m_sectionHeaderIndex{};
+    iso::uint32_t const m_count{};
+    iso::uint32_t const m_entrySize{};
+    iso::uint32_t const m_sectionHeaderIndex{};
     char const m_data{};
 
     public:
-      enum struct section_type : core::uint32_t
+      enum struct section_type : iso::uint32_t
         {
         unused,
         program_data,
@@ -36,7 +37,7 @@ namespace os::multiboot::tags
         number_of_defined_types,
         };
 
-      enum struct section_flags : core::uint64_t
+      enum struct section_flags : iso::uint64_t
         {
         writable = 0x1,
         allocated = 0x2,
@@ -56,16 +57,16 @@ namespace os::multiboot::tags
 
       class entry
         {
-        core::uint32_t const m_nameOffset{};
+        iso::uint32_t const m_nameOffset{};
         section_type const m_type{};
         section_flags const m_flags{};
         void const* m_virtualAddress{};
-        core::uint64_t const m_offset{};
-        core::uint64_t const m_size{};
-        core::uint32_t const m_link{};
-        core::uint32_t const m_info{};
-        core::uint64_t const m_alignment{};
-        core::uint64_t const m_entrySize{};
+        iso::uint64_t const m_offset{};
+        iso::uint64_t const m_size{};
+        iso::uint32_t const m_link{};
+        iso::uint32_t const m_info{};
+        iso::uint64_t const m_alignment{};
+        iso::uint64_t const m_entrySize{};
 
         public:
           section_type const & type() const noexcept { return m_type; }
@@ -76,8 +77,8 @@ namespace os::multiboot::tags
         friend elf_symbols;
         };
 
-      core::uint32_t const & count() const noexcept { return m_count; }
-      core::uint32_t const & entry_size() const noexcept { return m_entrySize; }
+      iso::uint32_t const & count() const noexcept { return m_count; }
+      iso::uint32_t const & entry_size() const noexcept { return m_entrySize; }
 
       entry const * begin() const { return reinterpret_cast<entry const *>(&m_data); }
       entry const * end() const { return begin() + count(); }
@@ -115,11 +116,13 @@ namespace os::multiboot::tags
       CASE(number_of_defined_types)
       }
 #undef CASE
+
+    core::panic("Unhandled Multiboot 2 ELF section type");
     }
 
   constexpr bool operator&(elf_symbols::section_flags const & lhs, elf_symbols::section_flags const & rhs)
     {
-    return static_cast<core::uint64_t>(lhs) & static_cast<core::uint64_t>(rhs);
+    return static_cast<iso::uint64_t>(lhs) & static_cast<iso::uint64_t>(rhs);
     }
 
   }

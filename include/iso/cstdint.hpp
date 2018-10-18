@@ -1,10 +1,9 @@
-#ifndef JESSY_CORE_INT_TYPES_HPP
-#define JESSY_CORE_INT_TYPES_HPP
+#ifndef JESSY_ISO_CSTDINT_HPP
+#define JESSY_ISO_CSTDINT_HPP
 
 #include <stdint.h>
-#include <stddef.h>
 
-namespace os::core
+namespace os::iso
   {
 
   using ::int8_t;
@@ -44,18 +43,6 @@ namespace os::core
   using ::uintmax_t;
 
   using ::uintptr_t;
-
-  using ::ptrdiff_t;
-
-  using ::size_t;
-
-  using ::max_align_t;
-
-  using nullptr_t = decltype(nullptr);
-
-  using byte_t = unsigned char;
-
-  enum class byte : byte_t { };
 
   }
 

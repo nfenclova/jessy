@@ -8,14 +8,14 @@ namespace os::multiboot::tags
   {
 
   MULTIBOOT_TAG_CLASS_BEGIN(module)
-    core::uint32_t const m_startAddress{};
-    core::uint32_t const m_endAddress{};
+    iso::uint32_t const m_startAddress{};
+    iso::uint32_t const m_endAddress{};
     char const m_string{};
 
     public:
-      core::uint32_t const & start_address() const noexcept { return m_startAddress; }
-      core::uint32_t const & end_address() const noexcept { return m_endAddress; }
-      char const * string() const noexcept { return & m_string; } 
+      iso::uint32_t const & start_address() const noexcept { return m_startAddress; }
+      iso::uint32_t const & end_address() const noexcept { return m_endAddress; }
+      char const * string() const noexcept { return & m_string; }
   MULTIBOOT_TAG_CLASS_END
 
 

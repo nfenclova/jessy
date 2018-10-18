@@ -12,6 +12,7 @@
 --sysroot=/usr/lib/gcc/x86_64-elf/7.3.0
 
 -DUNREACHABLE=__builtin_unreachable
+-DUNDERLYING_TYPE=__underlying_type
 
 -Iinclude
 

@@ -3,16 +3,17 @@
 
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
+#include "core/error.hpp"
 
 namespace os::multiboot::tags
   {
 
   MULTIBOOT_TAG_CLASS_BEGIN(memory_map)
-    core::uint32_t const m_entrySize{};
-    core::uint32_t const m_entryVersion{};
+    iso::uint32_t const m_entrySize{};
+    iso::uint32_t const m_entryVersion{};
 
     public:
-      enum struct entry_type : core::uint32_t
+      enum struct entry_type : iso::uint32_t
         {
         available = 1,
         reserved = 2,
@@ -24,19 +25,19 @@ namespace os::multiboot::tags
       struct entry
         {
         void const * const & base_address() const noexcept { return m_baseAddress; }
-        core::uint64_t const & length() const noexcept { return m_length; }
+        iso::uint64_t const & length() const noexcept { return m_length; }
         entry_type const & type() const noexcept { return m_type; }
 
         private:
           void const * const m_baseAddress{};
-          core::uint64_t const m_length{};
+          iso::uint64_t const m_length{};
           entry_type const m_type{};
-          core::uint32_t const m_reserved{};
+          iso::uint32_t const m_reserved{};
         };
 
-      core::uint32_t const & entry_size() const noexcept { return m_entrySize; }
-      core::uint32_t const & entry_version() const noexcept { return m_entryVersion; }
-      core::uint32_t entries() const noexcept { return (m_header.size - sizeof(memory_map)) / m_entrySize; }
+      iso::uint32_t const & entry_size() const noexcept { return m_entrySize; }
+      iso::uint32_t const & entry_version() const noexcept { return m_entryVersion; }
+      iso::uint32_t entries() const noexcept { return (m_header.size - sizeof(memory_map)) / m_entrySize; }
       entry const * begin() const noexcept { return reinterpret_cast<entry const *>(this + 1); }
       entry const * end() const noexcept { return begin() + entries(); }
   MULTIBOOT_TAG_CLASS_END
@@ -53,6 +54,8 @@ namespace os::multiboot::tags
       CASE(bad_ram)
       }
 #undef CASE
+
+    core::panic("Unhandled Multiboot 2 memory map type");
     }
 
   }
