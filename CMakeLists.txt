@@ -25,7 +25,7 @@ include("LinkerConfiguration")
 include("NasmConfiguration")
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of the build" FORCE)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")

@@ -2,6 +2,9 @@
 
 include("FindExternalTool")
 
+set(QEMU_SYSTEM_MEMORY "128M" CACHE STRING "The ammount RAM presented to the virtual machine")
+message(STATUS "QEMU will expose ${QEMU_SYSTEM_MEMORY} of RAM to the virtual machine")
+
 set(GENERATED_FILES)
 
 find_external_tool(NAME GRUB_MKRESCUE COMMAND "grub-mkrescue" REQUIRED)
@@ -42,12 +45,12 @@ add_custom_target(iso ALL
   )
 
 add_custom_target(boot
-  COMMAND ${QEMU_EXE} -cdrom ${ISO_OUTPUT_FILE} 2>/dev/null
+  COMMAND ${QEMU_EXE} -m ${QEMU_SYSTEM_MEMORY} -cdrom ${ISO_OUTPUT_FILE} 2>/dev/null
   DEPENDS iso
   )
 
 add_custom_target(boot_debug
-  COMMAND ${QEMU_EXE} -S -s -cdrom ${ISO_OUTPUT_FILE} 2>/dev/null &
+  COMMAND ${QEMU_EXE} -S -s -m ${QEMU_SYSTEM_MEMORY} -cdrom ${ISO_OUTPUT_FILE} 2>/dev/null &
   COMMAND ${GDB_EXE} -s "${DEBUG_SYMBOL_FILE}" -q -ex "target remote localhost:1234" -ex "break _start" -ex "c"
   DEPENDS ${SYMBOL_FILE} iso
   )
