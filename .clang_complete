@@ -5,3 +5,6 @@
 -Wno-gnu-include-next
 -DUNREACHABLE=__builtin_unreachable
 -DUNDERLYING_TYPE=__underlying_type
+-D__builtin_FILE()=\"\"
+-D__builtin_FUNCTION()=\"\"
+-D__builtin_LINE()=0
