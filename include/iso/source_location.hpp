@@ -17,7 +17,7 @@ namespace os::iso
       location.m_file = file;
       location.m_function = function;
       location.m_line = line;
-      location.m_file = file;
+      location.m_column = column;
       return location;
       }
 
