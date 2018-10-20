@@ -17,15 +17,19 @@ namespace os::iso
   template<typename ValueType>
   struct optional
     {
-    constexpr optional() : m_data{}, m_hasValue{} { }
-    constexpr optional(nullopt_t) : optional{} { }
+
+    // [optional.optional], constructors
+
+    constexpr optional() noexcept : m_nothing{}, m_hasValue{} { }
+
+    constexpr optional(nullopt_t) noexcept : optional{} { }
 
     optional(optional const & other)
       : m_hasValue{other.m_hasValue}
       {
       if(m_hasValue)
         {
-        m_data.value = other.m_data.value;
+        m_value = other.m_data.value;
         }
       }
 
@@ -34,80 +38,121 @@ namespace os::iso
       {
       if(m_hasValue)
         {
-        m_data.value = iso::move(other.m_data.value);
+        m_value = iso::move(other.m_data.value);
         }
       }
+
+    template<typename ...Args>
+    constexpr optional(iso::in_place_t, Args && ... args)
+      : m_value{iso::forward<Args>(args)...}
+      , m_hasValue{true} { }
 
     optional(ValueType const & value)
-      : m_hasValue{true}
-      {
-      m_data.value = value;
-      }
+      : m_value{value}
+      , m_hasValue{true} { }
 
     optional(ValueType && value)
-      : m_hasValue{true}
+      : m_value{iso::move(value)}
+      , m_hasValue{true} { }
+
+    // [optional.optional], observers
+
+    constexpr const ValueType * operator->() const
       {
-      m_data.value = iso::move(value);
+      throw_on_empty();
+      return &m_value;
       }
 
-    constexpr ValueType & value() &
+    constexpr ValueType * operator->()
       {
-      if(!m_hasValue)
-        {
-        core::panic("Illegal access to empty core::optional");
-        }
-
-      return m_data.value;
+      throw_on_empty();
+      return &m_value;
       }
 
-    constexpr ValueType const & value() const &
+    constexpr ValueType & operator*() &
       {
-      if(!m_hasValue)
-        {
-        core::panic("Illegal access to empty core::optional");
-        }
-
-      return m_data.value;
+      throw_on_empty();
+      return m_value;
       }
 
-    constexpr ValueType && value() &&
+    constexpr ValueType const & operator*() const &
       {
-      if(!m_hasValue)
-        {
-        core::panic("Illegal access to empty core::optional");
-        }
-
-      return iso::move(m_data.value);
+      throw_on_empty();
+      return m_value;
       }
 
-    constexpr ValueType const && value() const &&
+    constexpr ValueType && operator*() &&
       {
-      if(!m_hasValue)
-        {
-        core::panic("Illegal access to empty core::optional");
-        }
-
-      return iso::move(m_data.value);
+      throw_on_empty();
+      return iso::move(m_value);
       }
 
-    constexpr operator bool() const
+    constexpr ValueType const && operator*() const &&
+      {
+      throw_on_empty();
+      return iso::move(m_value);
+      }
+
+    constexpr explicit operator bool() const noexcept
       {
       return m_hasValue;
       }
 
-    template<typename Callable>
-    constexpr auto map(Callable function)
-      {
-      if(m_hasValue)
-        {
-        return optional{function(m_data.value)};
-        }
+    constexpr bool has_value() const noexcept { return static_cast<bool>(*this); }
 
-      return optional{};
+    constexpr ValueType & value() & { return **this; }
+
+    constexpr ValueType const & value() const & { return **this; }
+
+    constexpr ValueType && value() && { return **this; }
+
+    constexpr ValueType const && value() const && { return **this; }
+
+    template<typename OrType>
+    constexpr ValueType value_or(OrType && alternative) const &
+      {
+      if(*this)
+        {
+        return **this;
+        }
+      return static_cast<ValueType>(iso::forward<OrType>(alternative));
+      }
+
+    template<typename OrType>
+    constexpr ValueType value_or(OrType && alternative) &&
+      {
+      if(*this)
+        {
+        return iso::move(**this);
+        }
+      return static_cast<ValueType>(iso::forward<OrType>(alternative));
+      }
+
+    // [optional.optional], modifiers
+
+    void reset() noexcept
+      {
+      if(*this)
+        {
+        m_value.~ValueType();
+        m_hasValue = false;
+        }
       }
 
     private:
-      union storage { char base; ValueType value; } m_data;
+      constexpr void throw_on_empty()
+        {
+        if(!*this)
+          {
+          core::panic("Illegal access to empty iso::optional");
+          }
+        }
+
+      union
+        {
+        char m_nothing;
+        ValueType m_value;
+        };
       bool m_hasValue;
     };
 
