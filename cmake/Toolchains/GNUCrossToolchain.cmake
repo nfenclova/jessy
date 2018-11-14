@@ -28,6 +28,8 @@ if(NOT CMAKE_CXX_COMPILER)
   string(REGEX REPLACE "/crtbegin.o" "" CMAKE_SYSROOT ${CROSS_GCC_CRTBEGIN})
   mark_as_advanced(CMAKE_SYSROOT)
 
+  set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
+
   set(CMAKE_SYSTEM_NAME "Generic")
   set(CMAKE_SYSTEM_PROCESSOR "x86_64")
   set(CMAKE_CXX_COMPILER_TARGET "x86_64-none-none-elf")
@@ -35,7 +37,6 @@ if(NOT CMAKE_CXX_COMPILER)
   set(CMAKE_CXX_FLAGS_INIT
     "-ffreestanding"
     "-nostdlib"
-    "-static"
     "-m64"
     "-mno-red-zone"
     "-mcmodel=large"

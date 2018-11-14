@@ -24,6 +24,10 @@ include("CXXConfiguration")
 include("LinkerConfiguration")
 include("NasmConfiguration")
 
+# Include additional modules
+include("AddSubsystem")
+include("AddModule")
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of the build" FORCE)
 endif()

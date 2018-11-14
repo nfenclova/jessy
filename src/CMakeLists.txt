@@ -2,8 +2,6 @@
 
 set(GENERATED_FILES)
 
-include("AddSubsystem")
-
 add_subdirectory("bootstrap")
 add_subdirectory("core")
 add_subdirectory("kernel")
