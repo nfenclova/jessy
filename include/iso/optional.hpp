@@ -139,6 +139,17 @@ namespace os::iso
         }
       }
 
+    template<typename ... Args>
+    ValueType & emplace(Args && ... args)
+      {
+      if(*this)
+        {
+        m_value.~ValueType();
+        new (&m_value) ValueType(iso::forward<Args>(args)...);
+        }
+      return m_value;
+      }
+
     private:
       constexpr void throw_on_empty()
         {
