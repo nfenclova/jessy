@@ -1,10 +1,13 @@
 {
-    "C_Cpp.configurationWarnings": "Disabled",
     "cmake.configureArgs": [
         "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/Toolchains/GNUCrossToolchain.cmake"
     ],
     "cmake.buildBeforeRun": true,
-    "cmake.buildDirectory": "${workspaceRoot}/build",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
     "cmake.useCMakeServer": true,
-    "cmake.saveBeforeBuild": true
+    "cmake.saveBeforeBuild": true,
+
+    "clangd.arguments": [
+        "-compile-commands-dir=build"
+    ]
 }
