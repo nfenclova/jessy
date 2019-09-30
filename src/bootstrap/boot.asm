@@ -7,16 +7,17 @@ extern _end_physical
 
 section .bs_bss nobits alloc noexec write align=4096
 
-plm4:
+page_map_level_4:              ; pml4
   resq 512
-pdpl:
+page_map_level_3_low_memory:   ; pdpt (for low memory mappings)
   resq 512
-pdph:
+page_map_level_3_high_memory:  ; pdpt (for high memory mappings)
   resq 512
-pdh:
+page_map_level_2_low_memory:   ; pdt (for low memory mappings)
   resq 512
-pdl:
+page_map_level_2_high_memory:  ; pdt (for high memory mappings)
   resq 512
+
 global multiboot_information_pointer:data
 multiboot_information_pointer:
   resd 1
@@ -170,21 +171,21 @@ check_long_mode_is_supported:
   call _panic
 
 initialize_page_table_structure:
-  mov eax, pdpl
+  mov eax, page_map_level_3_low_memory
   or eax, 0x3
-  mov [plm4 + ((0x0000000000100000 >> 39) & 0x1ff) * 8], eax
+  mov [page_map_level_4 + ((0x0000000000100000 >> 39) & 0x1ff) * 8], eax
 
-  mov eax, pdph
+  mov eax, page_map_level_3_high_memory
   or eax, 0x3
-  mov [plm4 + ((0xffffffff80100000 >> 39) & 0x1ff) * 8], eax
+  mov [page_map_level_4 + ((0xffffffff80100000 >> 39) & 0x1ff) * 8], eax
 
-  mov eax, pdl
+  mov eax, page_map_level_2_low_memory
   or eax, 0x3
-  mov [pdpl + ((0x0000000000100000 >> 30) & 0x1ff) * 8], eax
+  mov [page_map_level_3_low_memory + ((0x0000000000100000 >> 30) & 0x1ff) * 8], eax
 
-  mov eax, pdh
+  mov eax, page_map_level_2_high_memory
   or eax, 0x3
-  mov [pdph + ((0xffffffff80100000 >> 30) & 0x1ff) * 8], eax
+  mov [page_map_level_3_high_memory + ((0xffffffff80100000 >> 30) & 0x1ff) * 8], eax
 
   xor ecx, ecx
 
@@ -196,8 +197,8 @@ initialize_page_table_structure:
   mov eax, cTwoMegaBytes
   mul ecx
   or  eax, cPagePresentBit | cPageWritableBit | cPageHugePageBit
-  mov [pdl + ecx * 8], eax
-  mov [pdh + ecx * 8], eax
+  mov [page_map_level_2_low_memory + ecx * 8], eax
+  mov [page_map_level_2_high_memory + ecx * 8], eax
 
   inc ecx
   cmp ecx, esi
@@ -206,7 +207,7 @@ initialize_page_table_structure:
   ret
 
 enable_paging:
-  mov eax, plm4
+  mov eax, page_map_level_4
   mov cr3, eax
 
   mov eax, cr4
