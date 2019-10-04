@@ -117,13 +117,13 @@ extern "C" void kernel_main(os::multiboot::information const * multiboot_informa
   {
   using os::vga::text::print_line;
 
+  _init();
+ 
   print_line(cDefaultOutputColor, "[JESSY] Entered kernel_main");
 
   print_multiboot_information(multiboot_information);
 
   print_memory_info();
-
-  _init();
 
   os::core::panic("Control-flow returned from kernel!");
   }
