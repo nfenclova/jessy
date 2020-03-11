@@ -116,6 +116,7 @@ _start:
   call check_long_mode_is_supported
   call initialize_page_table_structure
   call enable_paging
+  call enable_sse
 
   lgdt [gdt.ptr]
 
@@ -224,3 +225,15 @@ enable_paging:
   mov cr0, eax
 
   ret
+
+enable_sse:
+    mov eax, cr0
+    and eax, 0xFFFFFFFB
+    or eax, 0x00000002
+    mov cr0, eax
+
+    mov eax, cr4
+    or eax, 3 << 9
+    mov cr4, eax
+
+    ret
