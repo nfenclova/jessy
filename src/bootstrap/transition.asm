@@ -2,6 +2,7 @@
 
 %include "/common_constants.asm"
 
+extern _init
 extern kernel_main
 extern multiboot_information_pointer
 
@@ -21,6 +22,8 @@ _transition:
   mov rdi, cVgaTextBufferAddress
   mov rcx, cVgaTextBufferNumberOfQuads
   rep stosq
+
+  call _init
 
   mov rdi, [multiboot_information_pointer]
   call kernel_main
