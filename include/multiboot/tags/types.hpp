@@ -1,14 +1,14 @@
 #ifndef JESSY_MULTIBOOT_TAGS_TYPES_HPP
 #define JESSY_MULTIBOOT_TAGS_TYPES_HPP
 
-#include "iso/cstdint.hpp"
 #include "core/error.hpp"
+#include "iso/cstdint.hpp"
 
 namespace os::multiboot::tags
-  {
+{
 
   enum struct type : iso::uint32_t
-    {
+  {
     end,
     boot_command_line,
     boot_loader_name,
@@ -32,13 +32,15 @@ namespace os::multiboot::tags
     efi64_image_handle_pointer,
     image_load_base_address,
     unknown,
-    };
+  };
 
   char const * to_string(type type)
+  {
+#define CASE(Enumerator)                                                                                                       \
+  case type::Enumerator:                                                                                                       \
+    return #Enumerator;
+    switch (type)
     {
-#define CASE(Enumerator) case type::Enumerator: return #Enumerator;
-    switch(type)
-      {
       CASE(end)
       CASE(boot_command_line)
       CASE(boot_loader_name)
@@ -62,12 +64,12 @@ namespace os::multiboot::tags
       CASE(efi64_image_handle_pointer)
       CASE(image_load_base_address)
       CASE(unknown)
-      }
+    }
 #undef CASE
 
     core::panic("Unhandled Multiboot 2 tag type");
-    }
-
   }
+
+}  // namespace os::multiboot::tags
 
 #endif

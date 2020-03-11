@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 namespace os::iso
-  {
+{
 
   using ::ptrdiff_t;
 
@@ -16,8 +16,10 @@ namespace os::iso
 
   using byte_t = unsigned char;
 
-  enum class byte : byte_t { };
+  enum class byte : byte_t
+  {
+  };
 
-  }
+}  // namespace os::iso
 
 #endif

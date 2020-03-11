@@ -2,15 +2,15 @@
 #define JESSY_ISO_TYPE_TRAITS_HPP
 
 namespace os::iso
-  {
+{
 
   namespace impl::type_traits
-    {
+  {
     struct size_two
-      {
+    {
       char filler[2]{};
-      };
-    }
+    };
+  }  // namespace impl::type_traits
 
   /**
    * Wrap a constant value of integral type into a type
@@ -22,15 +22,21 @@ namespace os::iso
    */
   template<typename ValueType, ValueType Value>
   struct integral_constant
-    {
+  {
     using value_type = ValueType;
     using type = integral_constant;
 
     static ValueType constexpr value = Value;
 
-    constexpr operator value_type() const noexcept { return value; }
-    constexpr value_type operator()() const noexcept { return value; }
-    };
+    constexpr operator value_type() const noexcept
+    {
+      return value;
+    }
+    constexpr value_type operator()() const noexcept
+    {
+      return value;
+    }
+  };
 
   /**
    * Convenience alias for a type representing false
@@ -51,7 +57,9 @@ namespace os::iso
    * @tparam RType The right-hand type
    */
   template<typename LType, typename RType>
-  struct is_same : false_type { };
+  struct is_same : false_type
+  {
+  };
 
   /**
    * Check if two types are the same
@@ -59,7 +67,9 @@ namespace os::iso
    * @note Special case for for identical types
    */
   template<typename Type>
-  struct is_same<Type, Type> : true_type { };
+  struct is_same<Type, Type> : true_type
+  {
+  };
 
   /**
    * Convenience alias for accessing the @p type member of #os::iso::is_same
@@ -83,7 +93,7 @@ namespace os::iso
    * Static test suite for os::iso::is_same
    */
   namespace impl::type_traits::test::is_same
-    {
+  {
     static_assert(!os::iso::is_same<int, char>::value);
     static_assert(!os::iso::is_same<int, char>{});
     static_assert(!os::iso::is_same<int, char>{}());
@@ -93,58 +103,69 @@ namespace os::iso
     static_assert(os::iso::is_same<int, int>{});
     static_assert(os::iso::is_same<int, int>{}());
     static_assert(os::iso::is_same_v<int, int>);
-    }
+  }  // namespace impl::type_traits::test::is_same
 
   /**
    * Calculate the type resulting from removing the ref-qualifier from the given type
    */
-  template<typename Type> struct remove_reference { using type = Type; };
-  template<typename Type> struct remove_reference<Type &> { using type = Type; };
-  template<typename Type> struct remove_reference<Type &&> { using type = Type; };
+  template<typename Type>
+  struct remove_reference
+  {
+    using type = Type;
+  };
+  template<typename Type>
+  struct remove_reference<Type &>
+  {
+    using type = Type;
+  };
+  template<typename Type>
+  struct remove_reference<Type &&>
+  {
+    using type = Type;
+  };
 
   /**
    * Calculate the type resulting from removing the ref-qualifier from the given type
    *
    * @note This is a convenience alias for os::iso::remove_reference<Type>::type
    */
-  template<typename Type> using remove_reference_t = typename remove_reference<Type>::type;
+  template<typename Type>
+  using remove_reference_t = typename remove_reference<Type>::type;
 
   /**
    * Static test suite for os::iso::remove_reference
    */
   namespace impl::type_traits::test::remove_reference
-    {
+  {
     static_assert(!os::iso::is_same_v<int &, os::iso::remove_reference<int &>::type>);
     static_assert(!os::iso::is_same_v<int &, os::iso::remove_reference_t<int &>>);
 
     static_assert(os::iso::is_same_v<int, os::iso::remove_reference<int &>::type>);
     static_assert(os::iso::is_same_v<int, os::iso::remove_reference_t<int &>>);
-    }
+  }  // namespace impl::type_traits::test::remove_reference
 
   namespace impl::type_traits
-    {
+  {
     struct is_referenceable_test
-      {
+    {
       template<typename Type>
       static Type & test(int);
 
       template<typename Type>
       static size_two test(...);
-      };
-    }
+    };
+  }  // namespace impl::type_traits
 
   /**
    * Check if the given type can be used to bind references
    */
   template<typename Type>
-  struct is_referenceable :
-    integral_constant<
-      bool,
-      !is_same_v<
-        decltype(impl::type_traits::is_referenceable_test::test<Type>(0)),
-        impl::type_traits::size_two>
-      >
-    { };
+  struct is_referenceable
+      : integral_constant<
+            bool,
+            !is_same_v<decltype(impl::type_traits::is_referenceable_test::test<Type>(0)), impl::type_traits::size_two>>
+  {
+  };
 
   /**
    * Check if the given type can be used to bind references
@@ -155,19 +176,19 @@ namespace os::iso
   constexpr bool is_referenceable_v = is_referenceable<Type>{};
 
   namespace impl::type_traits
-    {
+  {
     template<typename Type, bool = is_referenceable_v<Type>>
     struct add_rvalue_reference_select
-      {
+    {
       using type = Type;
-      };
+    };
 
     template<typename Type>
     struct add_rvalue_reference_select<Type, true>
-      {
+    {
       using type = Type &&;
-      };
-    }
+    };
+  }  // namespace impl::type_traits
 
   /**
    * @brief Calculate the type arising from adding @p && to the given type
@@ -176,7 +197,9 @@ namespace os::iso
    * @p os::iso::is_referenceable_v is equal to @p true. Otherwise, @p type will be equal to @p Type
    */
   template<typename Type>
-  struct add_rvalue_reference : impl::type_traits::add_rvalue_reference_select<Type> { };
+  struct add_rvalue_reference : impl::type_traits::add_rvalue_reference_select<Type>
+  {
+  };
 
   /**
    * Calculate the type arising from adding @p && to the given type
@@ -190,26 +213,26 @@ namespace os::iso
    * Static test suite for os::iso::add_rvalue_reference
    */
   namespace impl::type_traits::test::add_rvalue_reference
-    {
+  {
     static_assert(is_same_v<int &&, add_rvalue_reference_t<int>>);
     static_assert(is_same_v<int &&, add_rvalue_reference_t<int &&>>);
-    static_assert(is_same_v<int &,  add_rvalue_reference_t<int &>>);
-    }
+    static_assert(is_same_v<int &, add_rvalue_reference_t<int &>>);
+  }  // namespace impl::type_traits::test::add_rvalue_reference
 
   namespace impl::type_traits
-    {
+  {
     template<typename Type, bool = is_referenceable_v<Type>>
     struct add_lvalue_reference_select
-      {
+    {
       using type = Type;
-      };
+    };
 
     template<typename Type>
     struct add_lvalue_reference_select<Type, true>
-      {
+    {
       using type = Type &;
-      };
-    }
+    };
+  }  // namespace impl::type_traits
 
   /**
    * @brief Calculate the type arising from adding @p & to the given type
@@ -218,7 +241,9 @@ namespace os::iso
    * @p os::iso::is_referenceable_v is equal to @p true. Otherwise, @p type will be equal to @p Type
    */
   template<typename Type>
-  struct add_lvalue_reference : impl::type_traits::add_lvalue_reference_select<Type> { };
+  struct add_lvalue_reference : impl::type_traits::add_lvalue_reference_select<Type>
+  {
+  };
 
   /**
    * Calculate the type arising from adding @p & to the given type
@@ -232,20 +257,20 @@ namespace os::iso
    * Static test suite for os::iso::add_lvalue_reference
    */
   namespace impl::type_traits::test::add_lvalue_reference
-    {
+  {
     static_assert(is_same_v<int &, add_lvalue_reference_t<int>>);
     static_assert(is_same_v<int &, add_lvalue_reference_t<int &&>>);
     static_assert(is_same_v<int &, add_lvalue_reference_t<int &>>);
-    }
+  }  // namespace impl::type_traits::test::add_lvalue_reference
 
   /**
    * Calculate the underlying type of an enumeration type
    */
   template<typename Type>
   struct underlying_type
-    {
+  {
     using type = UNDERLYING_TYPE(Type);
-    };
+  };
 
   /**
    * Calculate the underlying type of an enumeration type
@@ -255,6 +280,6 @@ namespace os::iso
   template<typename Type>
   using underlying_type_t = typename underlying_type<Type>::type;
 
-  }
+}  // namespace os::iso
 
 #endif

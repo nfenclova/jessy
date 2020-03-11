@@ -6,10 +6,10 @@
 #include "units/bytes.hpp"
 
 namespace os::memory::page_allocator
-  {
+{
 
   iso::optional<page> alloc(os::units::bytes size);
 
-  }
+}
 
 #endif

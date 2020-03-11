@@ -4,7 +4,7 @@
 #include "iso/cstddef.hpp"
 
 namespace os::bootstrap
-  {
+{
 
   extern "C" iso::byte_t const _start_physical;
   extern "C" iso::byte_t const _end_physical;
@@ -43,6 +43,6 @@ namespace os::bootstrap
    */
   auto const cVirtualMemoryEndAddress = &_end_virtual;
 
-  }
+}  // namespace os::bootstrap
 
 #endif

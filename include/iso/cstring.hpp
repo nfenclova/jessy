@@ -1,8 +1,8 @@
 #ifndef JESSY_ISO_CSTRING_HPP
 #define JESSY_ISO_CSTRING_HPP
 
-#include "iso/cstdint.hpp"
 #include "iso/cstddef.hpp"
+#include "iso/cstdint.hpp"
 
 extern "C" void _set_memory_byte(uint8_t volatile *, uint8_t const, size_t);
 extern "C" void _set_memory_word(uint16_t volatile *, uint16_t const, size_t);
@@ -15,7 +15,7 @@ extern "C" void _copy_memory_double_word(uint32_t volatile *, uint32_t volatile 
 extern "C" void _copy_memory_quad_word(uint64_t volatile *, uint64_t volatile const *, size_t const count);
 
 namespace os::iso
-  {
+{
   /**
    * @brief Initialize the memory pointed to by @p destination with @p count copies of @p value
    *
@@ -28,25 +28,25 @@ namespace os::iso
    */
   template<typename ValueType>
   void set_memory(ValueType volatile * destination, ValueType const value, size_t count)
+  {
+    if constexpr (sizeof(ValueType) == 1)
     {
-    if constexpr(sizeof(ValueType) == 1)
-      {
       _set_memory_byte(reinterpret_cast<uint8_t volatile *>(destination), static_cast<uint8_t>(value), count);
-      }
-    else if constexpr(sizeof(ValueType) == 2)
-      {
+    }
+    else if constexpr (sizeof(ValueType) == 2)
+    {
       _set_memory_word(reinterpret_cast<uint16_t volatile *>(destination), static_cast<uint16_t>(value), count);
-      }
-    else if constexpr(sizeof(ValueType) == 4)
-      {
+    }
+    else if constexpr (sizeof(ValueType) == 4)
+    {
       _set_memory_double_word(reinterpret_cast<uint32_t volatile *>(destination), static_cast<uint32_t>(value), count);
-      }
+    }
     else
-      {
+    {
       static_assert(sizeof(ValueType) == 8, "Can only copy 1, 2, 4, or 8 byte values");
       _set_memory_quad_word(reinterpret_cast<uint64_t volatile *>(destination), static_cast<uint64_t>(value), count);
-      }
     }
+  }
 
   /**
    * @brief Copy @p count values of type @p ValueType from the memory pointed to by @p source to @p destination
@@ -60,33 +60,33 @@ namespace os::iso
    */
   template<typename ValueType>
   void copy_memory(ValueType volatile * destination, ValueType volatile const * source, size_t count)
+  {
+    if constexpr (sizeof(ValueType) == 1)
     {
-    if constexpr(sizeof(ValueType) == 1)
-      {
       _copy_memory_byte(reinterpret_cast<uint8_t volatile *>(destination),
                         reinterpret_cast<uint8_t volatile const *>(source),
                         count);
-      }
-    else if constexpr(sizeof(ValueType) == 2)
-      {
+    }
+    else if constexpr (sizeof(ValueType) == 2)
+    {
       _copy_memory_word(reinterpret_cast<uint16_t volatile *>(destination),
                         reinterpret_cast<uint16_t volatile const *>(source),
                         count);
-      }
-    else if constexpr(sizeof(ValueType) == 4)
-      {
+    }
+    else if constexpr (sizeof(ValueType) == 4)
+    {
       _copy_memory_double_word(reinterpret_cast<uint32_t volatile *>(destination),
                                reinterpret_cast<uint32_t volatile const *>(source),
                                count);
-      }
+    }
     else
-      {
+    {
       static_assert(sizeof(ValueType) == 8, "Can only copy 1, 2, 4, or 8 byte values");
       _copy_memory_quad_word(reinterpret_cast<uint64_t volatile *>(destination),
                              reinterpret_cast<uint64_t volatile const *>(source),
                              count);
-      }
     }
   }
+}  // namespace os::iso
 
 #endif

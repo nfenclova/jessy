@@ -16,5 +16,9 @@
             "type": "BOOL",
             "value": "YES"
         },
-    ]
+    ],
+
+    "files.associations": {
+        ".clang-format": "yaml"
+    }
 }
