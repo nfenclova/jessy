@@ -7,6 +7,7 @@ global _init
 
 _init:
   push rbp
+  mov rbp, rsp
 
 section .fini
 bits 64
@@ -14,3 +15,4 @@ global _fini
 
 _fini:
   push rbp
+  mov rbp, rsp
