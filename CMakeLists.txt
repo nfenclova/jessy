@@ -17,6 +17,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 include("FindExternalTool")
 
 ### Project Configuration Options
+option(ENABLE_LTO "Enable Link-Time-Optimization" ON)
 set(QEMU_SYSTEM_MEMORY "128M" CACHE STRING "The ammount RAM presented to the virtual machine")
 
 message(STATUS "QEMU will expose ${QEMU_SYSTEM_MEMORY} of RAM to the virtual machine")
@@ -60,7 +61,7 @@ set_target_properties("${PROJECT_NAME}" PROPERTIES
   CXX_STANDARD "20"
   CXX_EXTENSIONS OFF
   CXX_STANDARD_REQUIRED YES
-  INTERPROCEDURAL_OPTIMIZATION ON
+  INTERPROCEDURAL_OPTIMIZATION ${ENABLE_LTO}
   LINK_DEPENDS "${PROJECT_SOURCE_DIR}/src/kernel/kernel.ld"
   ADDITIONAL_CLEAN_FILES "${DEBUG_SYMBOL_FILE}"
 )
@@ -86,6 +87,7 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
 
 target_link_options("${PROJECT_NAME}" PUBLIC
   "-T${CMAKE_CURRENT_SOURCE_DIR}/src/kernel/kernel.ld"
+  $<$<BOOL:${ENABLE_LTO}>:-flto>
   "-fuse-ld=bfd"
 )
 
