@@ -143,7 +143,7 @@ add_custom_target("iso"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.iso"
   "${PROJECT_BINARY_DIR}/isofs"
   "2>/dev/null"
-  SOURCES
+  DEPENDS
   "${PROJECT_BINARY_DIR}/isofs/boot/grub/grub.cfg"
   "${PROJECT_BINARY_DIR}/isofs/boot/${PROJECT_NAME}"
   BYPRODUCTS
@@ -160,7 +160,7 @@ add_custom_target("boot"
   "-cdrom"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.iso"
   "2>/dev/null"
-  SOURCES
+  DEPENDS
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.iso"
   COMMENT "Booting the kernel"
 )
@@ -183,7 +183,7 @@ add_custom_target("boot_debug"
   "target remote localhost:1234"
   "-ex" "break _start"
   "-ex" "c"
-  SOURCES
+  DEPENDS
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.iso"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sym"
   COMMENT "Booting the kernel with gdb attached"
@@ -196,7 +196,7 @@ add_custom_target("disassemble"
   "-Mintel"
   "-C"
   "$<TARGET_FILE:${PROJECT_NAME}>"
-  SOURCES
+  DEPENDS
   "$<TARGET_FILE:${PROJECT_NAME}>"
   COMMENT "Dumping disassembly of the kernel"
   )
