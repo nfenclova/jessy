@@ -4,6 +4,7 @@
 
     "cmake.cpptools.guessSourceFileConfigurations": true,
     "cmake.cpptools.intelliSenseMode": "gcc-x64",
+    "cmake.reconfigureOnChange": true,
     "cmake.default.cacheEntries": [
         {
             "name": "CMAKE_TOOLCHAIN_FILE",
