@@ -1,21 +1,9 @@
 {
-    "C_Cpp.default.configurationProvider": "go2sh.cmake-integration",
     "C_Cpp.autoAddFileAssociations": false,
 
-    "cmake.cpptools.guessSourceFileConfigurations": true,
-    "cmake.cpptools.intelliSenseMode": "gcc-x64",
-    "cmake.reconfigureOnChange": true,
-    "cmake.default.cacheEntries": [
-        {
-            "name": "CMAKE_TOOLCHAIN_FILE",
-            "type": "PATH",
-            "value": "${workspaceFolder}/cmake/Toolchains/GNUCrossToolchain.cmake"
-        },
-        {
-            "name": "CMAKE_EXPORT_COMPILE_COMMANDS",
-            "type": "BOOL",
-            "value": "YES"
-        },
+    "cmake.toolset": "",
+    "cmake.configureArgs": [
+        "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/Toolchains/GNUCrossToolchain.cmake"
     ],
 
     "files.associations": {
