@@ -7,6 +7,8 @@
             ],
             "defines": [],
             "compilerPath": "x86_64-elf-gcc",
+            "cStandard": "c18",
+            "cppStandard": "c++20",
             "intelliSenseMode": "gcc-x64",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
