@@ -1,7 +1,6 @@
 #ifndef JESSY_MEMORY_PAGE_HPP
 #define JESSY_MEMORY_PAGE_HPP
 
-#include "iso/cstdint.hpp"
 #include "units/bytes.hpp"
 
 #include <cstddef>

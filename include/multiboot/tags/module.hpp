@@ -4,20 +4,22 @@
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
 
+#include <cstdint>
+
 namespace os::multiboot::tags
 {
 
   MULTIBOOT_TAG_CLASS_BEGIN(module)
-  iso::uint32_t const m_startAddress{};
-  iso::uint32_t const m_endAddress{};
+  std::uint32_t const m_startAddress{};
+  std::uint32_t const m_endAddress{};
   char const m_string{};
 
 public:
-  iso::uint32_t const & start_address() const noexcept
+  std::uint32_t const & start_address() const noexcept
   {
     return m_startAddress;
   }
-  iso::uint32_t const & end_address() const noexcept
+  std::uint32_t const & end_address() const noexcept
   {
     return m_endAddress;
   }

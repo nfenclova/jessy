@@ -1,6 +1,5 @@
 #include "bootstrap/addresses.hpp"
 #include "core/error.hpp"
-#include "iso/cstdint.hpp"
 #include "multiboot/information.hpp"
 #include "vga/text.hpp"
 

@@ -1,8 +1,9 @@
 #ifndef JESSY_MULTIBOOT_INFORMATION_HPP
 #define JESSY_MULTIBOOT_INFORMATION_HPP
 
-#include "iso/cstdint.hpp"
 #include "multiboot/tags.hpp"
+
+#include <cstdint>
 
 namespace os::multiboot
 {
@@ -19,7 +20,7 @@ namespace os::multiboot
   };
 
   template<typename... Handlers>
-  tag_visitor(Handlers...)->tag_visitor<Handlers...>;
+  tag_visitor(Handlers...) -> tag_visitor<Handlers...>;
 
   struct information
   {
@@ -53,8 +54,8 @@ namespace os::multiboot
     }
 
   private:
-    iso::uint32_t total_size;
-    iso::uint32_t reserved;
+    std::uint32_t total_size;
+    std::uint32_t reserved;
   };
 
 }  // namespace os::multiboot

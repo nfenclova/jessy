@@ -1,6 +1,7 @@
 #include "memory/page.hpp"
 
 #include <cstddef>
+#include <cstdint>
 
 namespace os::memory
 {
@@ -12,7 +13,7 @@ namespace os::memory
 
   page page::for_address(void const * address)
   {
-    return page{reinterpret_cast<iso::uintptr_t>(address) / static_cast<iso::uint64_t>(cPageSize)};
+    return page{reinterpret_cast<std::uintptr_t>(address) / static_cast<std::uint64_t>(cPageSize)};
   }
 
 }  // namespace os::memory

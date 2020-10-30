@@ -3,6 +3,8 @@
 
 #include "multiboot/tags/types.hpp"
 
+#include <cstdint>
+
 namespace os::multiboot::tags
 {
 
@@ -15,7 +17,7 @@ namespace os::multiboot::tags
   struct tag_header
   {
     tags::type const type{};
-    iso::uint32_t const size{};
+    std::uint32_t const size{};
   };
 
 #define MULTIBOOT_TAG_CLASS_BEGIN(TagType)                                                                                     \

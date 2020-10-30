@@ -5,17 +5,19 @@
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
 
+#include <cstdint>
+
 namespace os::multiboot::tags
 {
 
   MULTIBOOT_TAG_CLASS_BEGIN(elf_symbols)
-  iso::uint32_t const m_count{};
-  iso::uint32_t const m_entrySize{};
-  iso::uint32_t const m_sectionHeaderIndex{};
+  std::uint32_t const m_count{};
+  std::uint32_t const m_entrySize{};
+  std::uint32_t const m_sectionHeaderIndex{};
   char const m_data{};
 
 public:
-  enum struct section_type : iso::uint32_t
+  enum struct section_type : std::uint32_t
   {
     unused,
     program_data,
@@ -37,7 +39,7 @@ public:
     number_of_defined_types,
   };
 
-  enum struct section_flags : iso::uint64_t
+  enum struct section_flags : std::uint64_t
   {
     writable = 0x1,
     allocated = 0x2,
@@ -57,16 +59,16 @@ public:
 
   class entry
   {
-    iso::uint32_t const m_nameOffset{};
+    std::uint32_t const m_nameOffset{};
     section_type const m_type{};
     section_flags const m_flags{};
     void const * m_virtualAddress{};
-    iso::uint64_t const m_offset{};
-    iso::uint64_t const m_size{};
-    iso::uint32_t const m_link{};
-    iso::uint32_t const m_info{};
-    iso::uint64_t const m_alignment{};
-    iso::uint64_t const m_entrySize{};
+    std::uint64_t const m_offset{};
+    std::uint64_t const m_size{};
+    std::uint32_t const m_link{};
+    std::uint32_t const m_info{};
+    std::uint64_t const m_alignment{};
+    std::uint64_t const m_entrySize{};
 
   public:
     section_type const & type() const noexcept
@@ -89,11 +91,11 @@ public:
     friend elf_symbols;
   };
 
-  iso::uint32_t const & count() const noexcept
+  std::uint32_t const & count() const noexcept
   {
     return m_count;
   }
-  iso::uint32_t const & entry_size() const noexcept
+  std::uint32_t const & entry_size() const noexcept
   {
     return m_entrySize;
   }
@@ -148,7 +150,7 @@ public:
 
   constexpr bool operator&(elf_symbols::section_flags const & lhs, elf_symbols::section_flags const & rhs)
   {
-    return static_cast<iso::uint64_t>(lhs) & static_cast<iso::uint64_t>(rhs);
+    return static_cast<std::uint64_t>(lhs) & static_cast<std::uint64_t>(rhs);
   }
 
 }  // namespace os::multiboot::tags

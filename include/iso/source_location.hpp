@@ -1,7 +1,7 @@
 #ifndef JESSY_ISO_SOURCE_LOCATION_HPP
 #define JESSY_ISO_SOURCE_LOCATION_HPP
 
-#include "iso/cstdint.hpp"
+#include <cstdint>
 
 namespace os::iso
 {
@@ -41,8 +41,8 @@ namespace os::iso
   private:
     char const * m_file;
     char const * m_function;
-    uint_least32_t m_line;
-    uint_least32_t m_column;
+    std::uint_least32_t m_line;
+    std::uint_least32_t m_column;
   };
 
 }  // namespace os::iso

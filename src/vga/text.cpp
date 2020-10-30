@@ -1,14 +1,14 @@
 #include "vga/text.hpp"
 
-#include "iso/cstdint.hpp"
 #include "iso/cstring.hpp"
 
 #include <cstddef>
+#include <cstdint>
 
 namespace os::vga::text
 {
 
-  using vga_text_buffer_cell = iso::uint16_t;
+  using vga_text_buffer_cell = std::uint16_t;
 
   /**
    * @brief The global text buffer state
@@ -84,7 +84,7 @@ namespace os::vga::text
     /**
      * Get a reference to a speficic cell in the VGA text buffer
      */
-    decltype(auto) cell(iso::uint16_t column, iso::uint16_t row)
+    decltype(auto) cell(std::uint16_t column, std::uint16_t row)
     {
       return *(cVGATextBufferBase + column + row * cVGATextBufferColumns);
     }
@@ -136,7 +136,7 @@ namespace os::vga::text
   {
     for (auto idx = 0ull; text[idx]; ++idx)
     {
-      cell() = static_cast<iso::uint16_t>(color) + text[idx];
+      cell() = static_cast<std::uint16_t>(color) + text[idx];
       move_to_next_cell();
     }
   }
@@ -146,13 +146,13 @@ namespace os::vga::text
     print(color, "0x");
     for (auto nibble = 1; nibble <= 16; ++nibble)
     {
-      auto const address = reinterpret_cast<iso::uintptr_t>(pointer);
+      auto const address = reinterpret_cast<std::uintptr_t>(pointer);
       auto const value = (address >> ((16 - nibble) * 4)) & 0xf;
       print(color, cHexDigitStrings[value]);
     }
   }
 
-  void print(color color, iso::uint32_t const value)
+  void print(color color, std::uint32_t const value)
   {
     if (value)
     {
@@ -173,7 +173,7 @@ namespace os::vga::text
     move_to_next_line();
   }
 
-  void print_line(color color, iso::uint32_t const value)
+  void print_line(color color, std::uint32_t const value)
   {
     print(color, value);
     move_to_next_line();

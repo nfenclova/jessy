@@ -1,10 +1,10 @@
 #ifndef JESSY_VGA_TEXT_HPP
 #define JESSY_VGA_TEXT_HPP
 
-#include "iso/cstdint.hpp"
 #include "iso/type_traits.hpp"
 
 #include <cstddef>
+#include <cstdint>
 
 namespace os::vga::text
 {
@@ -47,10 +47,10 @@ namespace os::vga::text
 
   struct color
   {
-    explicit constexpr operator iso::uint16_t() const
+    explicit constexpr operator std::uint16_t() const
     {
-      return (static_cast<uint16_t>(foreground_color) | static_cast<uint16_t>(foreground_modifier) |
-              static_cast<uint16_t>(background_color) | static_cast<uint16_t>(background_modifier))
+      return static_cast<std::uint16_t>(static_cast<std::byte>(foreground_color) | static_cast<std::byte>(foreground_modifier) |
+                                        static_cast<std::byte>(background_color) | static_cast<std::byte>(background_modifier))
              << 8;
     }
 
@@ -64,13 +64,13 @@ namespace os::vga::text
 
   void print(color color, void const * const pointer);
 
-  void print(color color, iso::uint32_t value);
+  void print(color color, std::uint32_t value);
 
   void print_line(color color, char const * const text);
 
   void print_line(color color, void const * const pointer);
 
-  void print_line(color color, iso::uint32_t const value);
+  void print_line(color color, std::uint32_t const value);
 
   void clear_screen();
 

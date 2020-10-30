@@ -2,12 +2,13 @@
 #define JESSY_MULTIBOOT_TAGS_TYPES_HPP
 
 #include "core/error.hpp"
-#include "iso/cstdint.hpp"
+
+#include <cstdint>
 
 namespace os::multiboot::tags
 {
 
-  enum struct type : iso::uint32_t
+  enum struct type : std::uint32_t
   {
     end,
     boot_command_line,

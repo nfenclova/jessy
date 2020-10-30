@@ -4,24 +4,26 @@
 #include "multiboot/tags/tag.hpp"
 #include "multiboot/tags/types.hpp"
 
+#include <cstdint>
+
 namespace os::multiboot::tags
 {
 
   MULTIBOOT_TAG_CLASS_BEGIN(boot_device)
-  iso::uint32_t const m_biosDevice{};
-  iso::uint32_t const m_partition{};
-  iso::uint32_t const m_subPartition{};
+  std::uint32_t const m_biosDevice{};
+  std::uint32_t const m_partition{};
+  std::uint32_t const m_subPartition{};
 
 public:
-  iso::uint32_t const & bios_device() const noexcept
+  std::uint32_t const & bios_device() const noexcept
   {
     return m_biosDevice;
   }
-  iso::uint32_t const & partition() const noexcept
+  std::uint32_t const & partition() const noexcept
   {
     return m_partition;
   }
-  iso::uint32_t const & sub_partition() const noexcept
+  std::uint32_t const & sub_partition() const noexcept
   {
     return m_subPartition;
   }
