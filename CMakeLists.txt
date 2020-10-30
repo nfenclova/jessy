@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 3.15.0)
 
+### Default Build Type Configuration
+set(CMAKE_BUILD_TYPE
+  "RelWithDebInfo"
+  CACHE
+  STRING
+  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel"
+)
+
+### Include Cross Toolchain
 include("FetchContent")
 
 FetchContent_Declare("toolchain"
@@ -12,10 +21,6 @@ project(jessy
   LANGUAGES CXX ASM_NASM
   VERSION 0.1.0
 )
-
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of the build" FORCE)
-endif()
 
 ### CMake Module Configuration
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
