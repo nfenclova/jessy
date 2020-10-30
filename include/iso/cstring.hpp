@@ -1,8 +1,9 @@
 #ifndef JESSY_ISO_CSTRING_HPP
 #define JESSY_ISO_CSTRING_HPP
 
-#include "iso/cstddef.hpp"
 #include "iso/cstdint.hpp"
+
+#include <cstddef>
 
 extern "C" void _set_memory_byte(uint8_t volatile *, uint8_t const, size_t);
 extern "C" void _set_memory_word(uint16_t volatile *, uint16_t const, size_t);

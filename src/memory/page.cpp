@@ -1,11 +1,13 @@
 #include "memory/page.hpp"
 
+#include <cstddef>
+
 namespace os::memory
 {
 
   page::operator void *() const
   {
-    return reinterpret_cast<void *>(id * static_cast<iso::size_t>(cPageSize));
+    return reinterpret_cast<void *>(id * static_cast<std::size_t>(cPageSize));
   }
 
   page page::for_address(void const * address)

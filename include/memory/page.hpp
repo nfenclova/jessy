@@ -1,9 +1,10 @@
 #ifndef JESSY_MEMORY_PAGE_HPP
 #define JESSY_MEMORY_PAGE_HPP
 
-#include "iso/cstddef.hpp"
 #include "iso/cstdint.hpp"
 #include "units/bytes.hpp"
+
+#include <cstddef>
 
 namespace os::memory
 {
@@ -15,7 +16,7 @@ namespace os::memory
     static page for_address(void const * address);
 
     operator void *() const;
-    iso::size_t const id{};
+    std::size_t const id{};
   };
 
 }  // namespace os::memory

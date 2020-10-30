@@ -1,13 +1,15 @@
 #ifndef JESSY_VGA_TEXT_HPP
 #define JESSY_VGA_TEXT_HPP
 
-#include "iso/cstddef.hpp"
 #include "iso/cstdint.hpp"
+#include "iso/type_traits.hpp"
+
+#include <cstddef>
 
 namespace os::vga::text
 {
 
-  enum struct foreground_color : iso::byte_t
+  enum struct foreground_color : iso::underlying_type_t<std::byte>
   {
     black,
     blue,
@@ -19,13 +21,13 @@ namespace os::vga::text
     gray,
   };
 
-  enum struct foreground_modifier : iso::byte_t
+  enum struct foreground_modifier : iso::underlying_type_t<std::byte>
   {
     none,
     bright = 0b00001000,
   };
 
-  enum struct background_color : iso::byte_t
+  enum struct background_color : iso::underlying_type_t<std::byte>
   {
     black = static_cast<unsigned char>(foreground_color::black) << 4,
     blue = static_cast<unsigned char>(foreground_color::blue) << 4,
@@ -37,7 +39,7 @@ namespace os::vga::text
     gray = static_cast<unsigned char>(foreground_color::gray) << 4,
   };
 
-  enum struct background_modifier : iso::byte_t
+  enum struct background_modifier : iso::underlying_type_t<std::byte>
   {
     none,
     blink = 0b10000000,

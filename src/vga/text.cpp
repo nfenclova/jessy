@@ -3,6 +3,8 @@
 #include "iso/cstdint.hpp"
 #include "iso/cstring.hpp"
 
+#include <cstddef>
+
 namespace os::vga::text
 {
 
@@ -16,7 +18,7 @@ namespace os::vga::text
     /**
      * The current offset into to VGA text buffer (e.g the next "free" cell)
      */
-    iso::ptrdiff_t gCurrentCell{};
+    std::ptrdiff_t gCurrentCell{};
   }  // namespace
 
   /**

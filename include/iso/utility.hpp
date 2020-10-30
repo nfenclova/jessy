@@ -1,8 +1,9 @@
 #ifndef JESSY_ISO_UTILITY_HPP
 #define JESSY_ISO_UTILITY_HPP
 
-#include "iso/cstddef.hpp"
 #include "iso/type_traits.hpp"
+
+#include <cstddef>
 
 namespace os::iso
 {
@@ -41,13 +42,13 @@ namespace os::iso
   template<typename Type>
   inline constexpr in_place_type_t<Type> in_place_type{};
 
-  template<iso::size_t Index>
+  template<std::size_t Index>
   struct in_place_index_t
   {
     explicit in_place_index_t() = default;
   };
 
-  template<iso::size_t Index>
+  template<std::size_t Index>
   inline constexpr in_place_index_t<Index> in_place_index{};
 
 }  // namespace os::iso
