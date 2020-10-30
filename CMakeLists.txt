@@ -18,7 +18,7 @@ FetchContent_Declare("toolchain"
 FetchContent_MakeAvailable("toolchain")
 
 project(jessy
-  LANGUAGES CXX ASM_NASM
+  LANGUAGES CXX ASM
   VERSION 0.1.0
 )
 
@@ -41,13 +41,13 @@ find_external_tool(NAME GDB COMMAND "gdb" REQUIRED)
 ### Kernel Executable
 add_executable("${PROJECT_NAME}"
   # Bootstrap
-  "src/bootstrap/boot.asm"
-  "src/bootstrap/multiboot_header.asm"
-  "src/bootstrap/transition.asm"
+  "src/bootstrap/boot.s"
+  "src/bootstrap/multiboot_header.s"
+  "src/bootstrap/transition.s"
 
   # Core
   "src/core/error.cpp"
-  "src/core/memory.asm"
+  "src/core/memory.s"
 
   # Kernel
   "src/kernel/main.cpp"
@@ -60,7 +60,6 @@ add_executable("${PROJECT_NAME}"
   "src/vga/text.cpp"
 )
 
-
 set_target_properties("${PROJECT_NAME}" PROPERTIES
   CXX_STANDARD "20"
   CXX_EXTENSIONS OFF
@@ -71,22 +70,22 @@ set_target_properties("${PROJECT_NAME}" PROPERTIES
 )
 
 target_compile_options("${PROJECT_NAME}" PUBLIC
-  $<$<COMPILE_LANGUAGE:CXX>:-Wall>
-  $<$<COMPILE_LANGUAGE:CXX>:-Wextra>
-  $<$<COMPILE_LANGUAGE:CXX>:-Werror>
-  $<$<COMPILE_LANGUAGE:CXX>:-pedantic-errors>
-  $<$<COMPILE_LANGUAGE:CXX>:-ggdb3>
-  $<$<COMPILE_LANGUAGE:ASM_NASM>:-gdwarf>
+  "-Wall"
+  "-Wextra"
+  "-Werror"
+  "-pedantic-errors"
+  "-ggdb3"
+  "-gdwarf"
+  "-Wa,-I${PROJECT_SOURCE_DIR}/include"
 )
 
-target_compile_definitions("${PROJECT_NAME}" PUBLIC
+target_compile_definitions("${PROJECT_NAME}" PRIVATE
   "UNREACHABLE=__builtin_unreachable"
   "UNDERLYING_TYPE=__underlying_type"
 )
 
-target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/bootstrap>
+target_include_directories("${PROJECT_NAME}" PRIVATE
+  "${PROJECT_SOURCE_DIR}/include"
 )
 
 target_link_directories("${PROJECT_NAME}" PRIVATE "scripts")
