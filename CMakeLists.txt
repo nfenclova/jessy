@@ -1,11 +1,17 @@
-# vim: ft=cmake ts=2 sw=2 et
-
-### Basic Project Configuration
 cmake_minimum_required(VERSION 3.15.0)
+
+include("FetchContent")
+
+FetchContent_Declare("toolchain"
+  GIT_REPOSITORY "https://github.com/nfenclova/jessy-cmake-toolchain.git"
+  GIT_TAG "master"
+)
+FetchContent_MakeAvailable("toolchain")
+
 project(jessy
   LANGUAGES CXX ASM_NASM
   VERSION 0.1.0
-  )
+)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of the build" FORCE)
@@ -29,10 +35,6 @@ find_external_tool(NAME GDB COMMAND "gdb" REQUIRED)
 
 ### Kernel Executable
 add_executable("${PROJECT_NAME}"
-  # Runtime (init)
-  "src/runtime/crti.asm"
-  "${CROSS_GCC_CRTBEGIN}"
-
   # Bootstrap
   "src/bootstrap/boot.asm"
   "src/bootstrap/multiboot_header.asm"
@@ -51,11 +53,9 @@ add_executable("${PROJECT_NAME}"
 
   # VGA
   "src/vga/text.cpp"
-
-  # Runtime (end)
-  "${CROSS_GCC_CRTEND}"
-  "src/runtime/crtn.asm"
 )
+
+jessy_link_runtime("${PROJECT_NAME}")
 
 set_target_properties("${PROJECT_NAME}" PROPERTIES
   CXX_STANDARD "20"
@@ -91,7 +91,7 @@ target_link_options("${PROJECT_NAME}" PUBLIC
   "-fuse-ld=bfd"
 )
 
-target_link_libraries("${PROJECT_NAME}"
+target_link_libraries("${PROJECT_NAME}" PRIVATE
   "gcc"
 )
 

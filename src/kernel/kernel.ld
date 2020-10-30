@@ -52,12 +52,16 @@ SECTIONS
 
   .init ALIGN(4K) : AT(ADDR (.init) - KERNEL_VMA)
   {
+    KEEP(*(.jessy_crti_init))
     KEEP(*(.init))
+    KEEP(*(.jessy_crtn_init))
   }
 
   .fini ALIGN(4K) : AT(ADDR (.fini) - KERNEL_VMA)
   {
+    KEEP(*(.jessy_crti_fini))
     KEEP(*(.fini))
+    KEEP(*(.jessy_crtn_fini))
   }
 
   .text ALIGN(4K) : AT(ADDR (.text) - KERNEL_VMA)
