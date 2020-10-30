@@ -60,14 +60,13 @@ add_executable("${PROJECT_NAME}"
   "src/vga/text.cpp"
 )
 
-jessy_link_runtime("${PROJECT_NAME}")
 
 set_target_properties("${PROJECT_NAME}" PROPERTIES
   CXX_STANDARD "20"
   CXX_EXTENSIONS OFF
   CXX_STANDARD_REQUIRED YES
   INTERPROCEDURAL_OPTIMIZATION ${ENABLE_LTO}
-  LINK_DEPENDS "${PROJECT_SOURCE_DIR}/src/kernel/kernel.ld"
+  LINK_DEPENDS "${PROJECT_SOURCE_DIR}/scripts/jessy.ld"
   ADDITIONAL_CLEAN_FILES "${DEBUG_SYMBOL_FILE}"
 )
 
@@ -90,15 +89,10 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/bootstrap>
 )
 
-target_link_options("${PROJECT_NAME}" PUBLIC
-  "-T${CMAKE_CURRENT_SOURCE_DIR}/src/kernel/kernel.ld"
-  $<$<BOOL:${ENABLE_LTO}>:-flto>
-  "-fuse-ld=bfd"
-)
-
-target_link_libraries("${PROJECT_NAME}" PRIVATE
-  "gcc"
-)
+target_link_directories("${PROJECT_NAME}" PRIVATE "scripts")
+target_link_options("${PROJECT_NAME}" PUBLIC "-Tjessy.ld")
+target_link_libraries("${PROJECT_NAME}" PRIVATE "gcc")
+jessy_link_runtime("${PROJECT_NAME}")
 
 add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
   COMMAND "${CMAKE_OBJCOPY}"
