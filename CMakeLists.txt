@@ -38,6 +38,14 @@ find_external_tool(NAME GRUB_MKRESCUE COMMAND "grub-mkrescue" REQUIRED)
 find_external_tool(NAME QEMU COMMAND "qemu-system-x86_64" REQUIRED)
 find_external_tool(NAME GDB COMMAND "gdb" REQUIRED)
 
+### Include Jessy C++ Standard Library
+FetchContent_Declare("cpplib"
+  GIT_REPOSITORY "https://github.com/nfenclova/jessy-cpplib.git"
+  GIT_TAG "master"
+)
+FetchContent_MakeAvailable("cpplib")
+
+
 ### Kernel Executable
 add_executable("${PROJECT_NAME}"
   # Bootstrap
@@ -90,7 +98,10 @@ target_include_directories("${PROJECT_NAME}" PRIVATE
 
 target_link_directories("${PROJECT_NAME}" PRIVATE "scripts")
 target_link_options("${PROJECT_NAME}" PUBLIC "-Tjessy.ld")
-target_link_libraries("${PROJECT_NAME}" PRIVATE "gcc")
+target_link_libraries("${PROJECT_NAME}" PRIVATE
+  "gcc"
+  "jessy::c++"
+)
 jessy_link_runtime("${PROJECT_NAME}")
 
 add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
