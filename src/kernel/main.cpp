@@ -28,11 +28,11 @@ namespace
     print_line(cDefaultOutputColor, cVirtualMemoryEndAddress);
   }
 
-  void print_multiboot_information(os::multiboot::information const * info)
+  void print_multiboot_information(os::multiboot::information const & info)
   {
     using os::vga::text::print, os::vga::text::print_line;
 
-    info->accept(os::multiboot::tag_visitor{
+    info.accept(os::multiboot::tag_visitor{
         [](os::multiboot::tags::boot_loader_name const & tag) {
           print(cDefaultOutputColor, "[MBOOT] Loaded by: ");
           print_line(cDefaultOutputColor, tag.name());
@@ -110,7 +110,7 @@ namespace
   }
 }  // namespace
 
-extern "C" void kernel_main(os::multiboot::information const * multiboot_information)
+extern "C" void kernel_main(os::multiboot::information const & multiboot_information)
 {
   using os::vga::text::print_line;
 
