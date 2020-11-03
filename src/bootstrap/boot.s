@@ -8,10 +8,19 @@
 .section .bs_bss, "aw", @nobits
 .align 4096
 
+.global page_map_level_4
 page_map_level_4:             .skip 512 * 8
+
+.global page_map_level_3_low_memory
 page_map_level_3_low_memory:  .skip 512 * 8
+
+.global page_map_level_3_high_memory
 page_map_level_3_high_memory: .skip 512 * 8
+
+.global page_map_level_2_low_memory
 page_map_level_2_low_memory:  .skip 512 * 8
+
+.global page_map_level_2_high_memory
 page_map_level_2_high_memory: .skip 512 * 8
 
 .global multiboot_information_pointer
